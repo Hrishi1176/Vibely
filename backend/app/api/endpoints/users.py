@@ -71,7 +71,7 @@ def get_user_suggestions(
     db: Session = Depends(get_db),
     current_user: Optional[User] = Depends(get_optional_user)
 ):
-    all_users = db.query(User).limit(30).all()
+    all_users = db.query(User).order_by(User.id.desc()).limit(30).all()
     results = []
     for u in all_users:
         if current_user and u.id == current_user.id:
