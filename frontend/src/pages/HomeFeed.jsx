@@ -135,9 +135,15 @@ function TrendingWidget({ trends, trendsLoading, onOpenCreate, user, onOpenAuth 
           <TrendingUp className="w-4 h-4 text-[var(--accent-primary)]" />
           Trending Vibes
         </h3>
-        <span className="text-[10px] text-[var(--text-muted)] font-medium flex items-center gap-1">
-              <span className="w-1.5 h-1.5 bg-red-400 rounded-full inline-block" />
-            <div key={n} className="flex items-center justify-between p-2 rounded-xl">
+        <span className="text-[10px] text-[var(--text-muted)] font-medium">
+          {trendsLoading ? 'Loading...' : `${trends.length} tags`}
+        </span>
+      </div>
+
+      {trendsLoading ? (
+        <div className="space-y-2">
+          {[1, 2].map((n) => (
+            <div key={n} className="flex items-center justify-between p-2 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-glass)]">
               <div className="w-24 h-3 skeleton rounded-lg" />
               <div className="w-10 h-3 skeleton rounded-lg" />
             </div>
