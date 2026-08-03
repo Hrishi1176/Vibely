@@ -50,6 +50,10 @@ export const markAuthCheckCompleted = () => {
 
 api.interceptors.request.use(
   (config) => {
+    const token = localStorage.getItem('vibely_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     if (isAuthFailure && !isAuthEndpoint(config.url) && !isAuthStatusCheck(config.url)) {
       const blockedError = new Error('Session expired. Please log in again.');
       blockedError.isAuthBlocked = true;
@@ -74,6 +78,7 @@ api.interceptors.response.use(
       }
       if (!isSilent && !isAuthFailure) {
         isAuthFailure = true;
+        localStorage.removeItem('vibely_token');
         toast.error('Session expired. Please log in again.');
       }
     } else if (error.response?.status >= 500) {
@@ -96,15 +101,22 @@ export const authAPI = {
     return api.post('/auth/login', params, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     }).then((response) => {
+      if (response.data?.access_token) {
+        localStorage.setItem('vibely_token', response.data.access_token);
+      }
       resetAuthFailure();
       return response;
     });
   },
   googleLogin: (tokenData) => api.post('/auth/google', tokenData).then((response) => {
+    if (response.data?.access_token) {
+      localStorage.setItem('vibely_token', response.data.access_token);
+    }
     resetAuthFailure();
     return response;
   }),
   logout: () => api.post('/auth/logout').finally(() => {
+    localStorage.removeItem('vibely_token');
     resetAuthFailure();
   }),
   getMe: () => api.get('/auth/me'),
