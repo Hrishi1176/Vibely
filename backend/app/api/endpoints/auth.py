@@ -5,6 +5,7 @@ import re
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from app.core.config import settings
 from app.core.database import get_db
 from app.core.security import verify_password, get_password_hash, create_access_token
 from app.models.models import User
@@ -127,14 +128,17 @@ def register(user_in: UserRegister, response: Response, db: Session = Depends(ge
     db.commit()
     db.refresh(new_user)
 
-    # Set HttpOnly Cookie for automatic login on registration
     access_token = create_access_token(subject=new_user.id)
+    is_local = settings.DATABASE_URL.startswith("sqlite")
+    cookie_samesite = "lax" if is_local else "none"
+    cookie_secure = False if is_local else True
+
     response.set_cookie(
         key="vibely_token",
         value=access_token,
         httponly=True,
-        samesite="lax",
-        secure=False,
+        samesite=cookie_samesite,
+        secure=cookie_secure,
         max_age=86400 * 7,
         path="/"
     )
@@ -152,13 +156,16 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
     
     access_token = create_access_token(subject=user.id)
 
-    # Set Secure HttpOnly Cookie
+    is_local = settings.DATABASE_URL.startswith("sqlite")
+    cookie_samesite = "lax" if is_local else "none"
+    cookie_secure = False if is_local else True
+
     response.set_cookie(
         key="vibely_token",
         value=access_token,
         httponly=True,
-        samesite="lax",
-        secure=False,
+        samesite=cookie_samesite,
+        secure=cookie_secure,
         max_age=86400 * 7,
         path="/"
     )
@@ -167,12 +174,16 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
 
 @router.post("/logout")
 def logout(response: Response):
-    # Clear HttpOnly Cookie
+    is_local = settings.DATABASE_URL.startswith("sqlite")
+    cookie_samesite = "lax" if is_local else "none"
+    cookie_secure = False if is_local else True
+
     response.delete_cookie(
         key="vibely_token",
         path="/",
         httponly=True,
-        samesite="lax"
+        samesite=cookie_samesite,
+        secure=cookie_secure
     )
     return {"message": "Logged out successfully"}
 
