@@ -3,6 +3,19 @@ import { playToastSound } from '../utils/toastSound';
 
 const WebSocketContext = createContext();
 
+const rawApiBaseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1').trim().replace(/\/$/, '');
+const API_BASE_URL = rawApiBaseUrl.endsWith('/api/v1') ? rawApiBaseUrl : `${rawApiBaseUrl}/api/v1`;
+
+const getWebSocketUrl = () => {
+  const token = localStorage.getItem('vibely_token');
+  const wsHost = API_BASE_URL.replace(/^http/, 'ws').replace(/\/api\/v1$/, '');
+  let wsUrl = `${wsHost}/api/v1/ws/chat`;
+  if (token) {
+    wsUrl += `?token=${encodeURIComponent(token)}`;
+  }
+  return wsUrl;
+};
+
 export function WebSocketProvider({ children, user }) {
   const [isConnected, setIsConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState({}); // { [user_id]: boolean }
@@ -23,9 +36,7 @@ export function WebSocketProvider({ children, user }) {
     }
 
     const connectWebSocket = () => {
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const host = window.location.host;
-      const wsUrl = `${protocol}//${host}/api/v1/ws/chat`;
+      const wsUrl = getWebSocketUrl();
 
       try {
         const ws = new WebSocket(wsUrl);
