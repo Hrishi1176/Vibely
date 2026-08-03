@@ -1,6 +1,7 @@
 import json
 import datetime
 from typing import Optional
+import os
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends, Query, status
 from sqlalchemy.orm import Session
 import jwt
@@ -90,6 +91,60 @@ async def websocket_chat_endpoint(websocket: WebSocket, token: Optional[str] = Q
 
                 elif msg_type == "ping":
                     await websocket.send_text(json.dumps({"type": "pong"}))
+
+                elif msg_type == "chat_message_binary":
+                    # Expect a following binary frame containing the file bytes
+                    receiver_id = int(data.get("receiver_id"))
+                    filename = data.get("filename") or f"voice-{int(datetime.datetime.utcnow().timestamp())}.webm"
+                    mime_type = data.get("mime_type") or "application/octet-stream"
+                    content = data.get("content", "")
+
+                    try:
+                        # Receive next frame (should be bytes)
+                        raw = await websocket.receive()
+                        file_bytes = raw.get("bytes")
+                        if not file_bytes:
+                            continue
+
+                        # Save file to uploads/messages
+                        uploads_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', 'uploads', 'messages')
+                        uploads_dir = os.path.normpath(uploads_dir)
+                        os.makedirs(uploads_dir, exist_ok=True)
+                        safe_name = f"ws_{current_user.id}_{receiver_id}_{int(datetime.datetime.utcnow().timestamp())}_{filename}"
+                        dest_path = os.path.join(uploads_dir, safe_name)
+                        with open(dest_path, 'wb') as f:
+                            f.write(file_bytes)
+
+                        file_url = f"/uploads/messages/{safe_name}"
+
+                        # Save message record
+                        new_msg = DirectMessage(
+                            sender_id=current_user.id,
+                            receiver_id=receiver_id,
+                            content=content,
+                            file_url=file_url,
+                            created_at=datetime.datetime.utcnow()
+                        )
+                        db.add(new_msg)
+                        db.commit()
+                        db.refresh(new_msg)
+
+                        msg_payload = {
+                            "type": "new_message",
+                            "id": new_msg.id,
+                            "sender_id": current_user.id,
+                            "receiver_id": receiver_id,
+                            "content": new_msg.content,
+                            "image_url": new_msg.image_url,
+                            "file_url": new_msg.file_url,
+                            "created_at": new_msg.created_at.isoformat()
+                        }
+
+                        await manager.send_personal_message(msg_payload, receiver_id)
+                        await manager.send_personal_message(msg_payload, current_user.id)
+
+                    except Exception as e:
+                        print(f"Error handling binary chat message: {e}")
 
             except Exception as e:
                 print(f"Error handling WebSocket message: {e}")

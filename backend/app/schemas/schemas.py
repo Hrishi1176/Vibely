@@ -152,6 +152,7 @@ class DirectMessageResponse(BaseModel):
     receiver_id: int
     content: Optional[str] = None
     image_url: Optional[str] = None
+    file_url: Optional[str] = None
     is_edited: bool = False
     edited_at: Optional[datetime] = None
     deleted_by_sender: bool = False

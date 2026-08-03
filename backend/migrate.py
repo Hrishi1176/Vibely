@@ -39,6 +39,9 @@ def run_migrations():
                 if "image_url" not in msg_cols:
                     conn.execute(text("ALTER TABLE direct_messages ADD COLUMN image_url TEXT"))
                     logger.info("Added column: direct_messages.image_url")
+                if "file_url" not in msg_cols:
+                    conn.execute(text("ALTER TABLE direct_messages ADD COLUMN file_url TEXT"))
+                    logger.info("Added column: direct_messages.file_url")
                 if "is_edited" not in msg_cols:
                     conn.execute(text("ALTER TABLE direct_messages ADD COLUMN is_edited BOOLEAN DEFAULT FALSE"))
                     logger.info("Added column: direct_messages.is_edited")
