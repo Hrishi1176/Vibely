@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Heart, MessageCircle, Share2, Sparkles, Send, Check, UserPlus, UserCheck, Bookmark, Hash } from 'lucide-react';
+import { Heart, MessageCircle, Share2, Sparkles, Send, Check, UserPlus, UserCheck, Bookmark, Hash, Bot } from 'lucide-react';
 import { postsAPI, usersAPI } from '../services/api';
 import { toast } from '../context/ToastContext';
 import { useConfirm } from '../context/ConfirmContext';
