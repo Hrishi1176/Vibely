@@ -179,7 +179,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-md animate-fade-in">
-      <div className="glass-panel w-full max-w-md rounded-3xl border border-[var(--border-glass)] p-5 sm:p-6 space-y-5 shadow-2xl relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto transition-colors duration-300">
+      <div className="glass-panel w-full max-w-md rounded-3xl border border-[var(--border-glass)] p-5 sm:p-6 space-y-5 shadow-sm relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto transition-colors duration-300">
         
         {/* Close Button */}
         <button onClick={onClose} className="absolute top-4 right-4 text-[var(--text-muted)] hover:text-[var(--text-primary)] p-1 rounded-xl hover:bg-[var(--scrollbar-thumb)] transition-colors min-h-[38px] min-w-[38px] flex items-center justify-center">
@@ -205,7 +205,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
             type="button"
             onClick={triggerGoogleLogin}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-100 text-gray-900 font-semibold py-2.5 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-xs sm:text-sm group active:scale-[0.99]"
+            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-100 text-gray-900 font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 text-xs sm:text-sm group active:scale-[0.99]"
           >
             {/* Official Google 4-Color SVG Logo */}
             <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -379,7 +379,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
       {/* Google OAuth Quick Sign-In Modal / Demo Fallback */}
       {showGoogleDemo && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-lg">
-          <div className="glass-panel w-full max-w-sm rounded-2xl border border-gray-700 p-6 space-y-4 shadow-2xl relative">
+          <div className="glass-panel w-full max-w-sm rounded-2xl border border-gray-700 p-6 space-y-4 shadow-sm relative">
             <button
               onClick={() => setShowGoogleDemo(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-200"

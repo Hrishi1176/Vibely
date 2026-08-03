@@ -219,8 +219,8 @@
 
 .glass-card:hover {
   border-color: var(--border-accent);
-  box-shadow: 0 8px 32px 0 var(--accent-glow);
-  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
   background: var(--card-hover);
 }
 
@@ -235,14 +235,14 @@
 /* Buttons */
 .btn-gradient {
   background: var(--accent-gradient);
-  box-shadow: 0 4px 14px 0 var(--accent-glow);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.16);
   transition: all 0.2s ease-in-out;
 }
 
 .btn-gradient:hover {
-  filter: brightness(1.12);
-  box-shadow: 0 6px 22px 0 var(--accent-glow);
-  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  transform: translateY(-0.5px);
 }
 
 /* Online Badge Glow - reduced */
@@ -329,10 +329,10 @@
 
 /* Neon Glow Pulse (modal backdrop aura) - highly subdued */
 @keyframes neonGlowPulse {
-  0%, 100% { opacity: 0.05; filter: blur(32px); transform: scale(1); }
-  50%       { opacity: 0.08; filter: blur(48px); transform: scale(1.05); }
+  0%, 100% { opacity: 0.02; filter: blur(18px); transform: scale(1); }
+  50%       { opacity: 0.04; filter: blur(24px); transform: scale(1.02); }
 }
-.animate-neon-glow { animation: neonGlowPulse 6s ease-in-out infinite; }
+.animate-neon-glow { animation: neonGlowPulse 8s ease-in-out infinite; }
 
 /* Fade In */
 @keyframes fadeInFast {
@@ -432,10 +432,10 @@
 
 /* Glow Pulse Button - Disabled for cleaner UI */
 @keyframes glowPulseBtn {
-  0%, 100% { box-shadow: 0 4px 14px var(--accent-glow); }
-  50%       { box-shadow: 0 4px 20px var(--accent-glow); }
+  0%, 100% { box-shadow: 0 4px 10px rgba(0,0,0,0.14); }
+  50%       { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 }
-.btn-glow-pulse { animation: glowPulseBtn 3s ease-in-out infinite; }
+.btn-glow-pulse { animation: glowPulseBtn 5s ease-in-out infinite; }
 
 /* Scale In Bounce */
 @keyframes scaleInBounce {

@@ -109,13 +109,13 @@ export default function App() {
       </div>
 
       {/* Main App Layout */}
-      <div className="max-w-6xl w-full mx-auto px-3 sm:px-4 py-4 sm:py-6 flex gap-6 flex-1 mb-20 lg:mb-0">
+      <div className="max-w-6xl w-full mx-auto px-3 sm:px-4 py-4 sm:py-6 flex flex-col lg:flex-row gap-4 lg:gap-6 flex-1 pb-28 lg:pb-0">
         
         {/* Left Sidebar (Desktop) */}
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} quota={quota} />
 
         {/* Center Main Viewport */}
-        <main className="flex-1 min-w-0">
+        <main className="flex-1 min-w-0 w-full">
           {activeTab === 'feed' && (
             <HomeFeed
               user={user}

@@ -88,10 +88,10 @@ export default function ProfilePage({ user, onUserUpdated, onOpenAuth }) {
   /* ── Not logged in ───────────────────────────────── */
   if (!user) {
     return (
-      <div className="glass-card rounded-3xl p-10 text-center space-y-5 border border-[var(--border-glass)] animate-scale-bounce">
+      <div className="glass-card rounded-3xl p-10 text-center space-y-5 border border-[var(--border-glass)]">
         <div
-          className="inline-flex p-4 rounded-3xl animate-float-slow"
-          style={{ background: 'var(--accent-gradient)', boxShadow: `0 8px 24px var(--accent-glow)` }}
+          className="inline-flex p-4 rounded-3xl"
+          style={{ background: 'var(--accent-gradient)' }}
         >
           <User className="w-8 h-8 text-white" />
         </div>
@@ -105,7 +105,7 @@ export default function ProfilePage({ user, onUserUpdated, onOpenAuth }) {
         </div>
         <button
           onClick={onOpenAuth}
-          className="btn-gradient btn-glow-pulse px-6 py-2.5 rounded-2xl text-white font-bold text-sm inline-flex items-center space-x-2"
+          className="btn-gradient px-6 py-2.5 rounded-2xl text-white font-bold text-sm inline-flex items-center space-x-2 shadow-sm transition-transform hover:-translate-y-px"
         >
           <User className="w-4 h-4" />
           <span>Sign In / Register Free</span>
@@ -117,7 +117,7 @@ export default function ProfilePage({ user, onUserUpdated, onOpenAuth }) {
   /* ── Loading skeleton ────────────────────────────── */
   if (loading) {
     return (
-      <div className="space-y-5 animate-fade-in">
+      <div className="space-y-5 transition-opacity duration-300">
         <div className="glass-card rounded-3xl p-6 border border-[var(--border-glass)] space-y-4">
           <div className="flex items-center space-x-4">
             <div className="w-20 h-20 rounded-full skeleton" />
@@ -143,23 +143,23 @@ export default function ProfilePage({ user, onUserUpdated, onOpenAuth }) {
     <div className="space-y-5">
 
       {/* ── Profile Header Card ──────────────────────── */}
-      <div className="glass-card rounded-3xl p-6 border border-[var(--border-glass)] space-y-5 animate-slide-up relative overflow-hidden">
+      <div className="glass-card rounded-3xl p-6 border border-[var(--border-glass)] space-y-5 transition-all duration-300 relative overflow-hidden">
         {/* Background gradient accent */}
         <div
           className="absolute top-0 left-0 right-0 h-1.5"
           style={{ background: 'var(--accent-gradient)' }}
         />
         <div
-          className="absolute -top-20 -right-20 w-48 h-48 rounded-full opacity-10 blur-3xl pointer-events-none animate-neon-glow"
+          className="absolute -top-20 -right-20 w-48 h-48 rounded-full opacity-10 blur-3xl pointer-events-none"
           style={{ background: 'var(--accent-primary)' }}
         />
 
-        <div className="relative flex flex-col sm:flex-row items-center sm:items-start gap-5">
+        <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start">
           {/* Avatar */}
           <div className="relative shrink-0 group">
             <div
-              className="w-20 h-20 rounded-full p-[2.5px] animate-float-slow"
-              style={{ background: 'var(--accent-gradient)', boxShadow: `0 0 24px var(--accent-glow)` }}
+              className="w-20 h-20 rounded-full p-[2.5px]"
+              style={{ background: 'var(--accent-gradient)' }}
             >
               <img
                 src={avatarPreview || profileData?.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`}
@@ -168,7 +168,7 @@ export default function ProfilePage({ user, onUserUpdated, onOpenAuth }) {
               />
             </div>
             {/* Online dot */}
-            <span className="absolute bottom-0.5 right-0.5 w-4 h-4 bg-emerald-400 rounded-full border-2 border-[var(--bg-primary)] badge-glow" />
+            <span className="absolute bottom-0.5 right-0.5 w-4 h-4 bg-emerald-400 rounded-full border-2 border-[var(--bg-primary)]" />
           </div>
 
           {/* Info */}
@@ -210,7 +210,7 @@ export default function ProfilePage({ user, onUserUpdated, onOpenAuth }) {
         </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[var(--border-glass)]">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-[var(--border-glass)]">
           {[
             { icon: FileText, label: 'Posts',     value: profileData?.posts_count     ?? userPosts.length },
             { icon: Users,    label: 'Followers',  value: profileData?.followers_count ?? 0 },
@@ -218,7 +218,7 @@ export default function ProfilePage({ user, onUserUpdated, onOpenAuth }) {
           ].map(({ icon: Icon, label, value }) => (
             <div
               key={label}
-              className="p-3 rounded-2xl border border-[var(--border-glass)] text-center transition-all hover:border-[var(--accent-primary)] hover:shadow-lg"
+              className="p-3 rounded-2xl border border-[var(--border-glass)] text-center transition-all hover:border-[var(--accent-primary)] hover:shadow-sm"
               style={{ background: 'var(--bg-secondary)' }}
             >
               <Icon className="w-4 h-4 mx-auto mb-1 text-[var(--accent-primary)]" />
@@ -233,7 +233,7 @@ export default function ProfilePage({ user, onUserUpdated, onOpenAuth }) {
       {isEditing && (
         <form
           onSubmit={handleSaveProfile}
-          className="glass-card rounded-3xl p-6 border border-[var(--border-glass)] space-y-5 animate-slide-up"
+          className="glass-card rounded-3xl p-6 border border-[var(--border-glass)] space-y-5 transition-all duration-300"
           style={{ borderColor: 'var(--accent-primary)40' }}
         >
           <h3 className="font-['Outfit'] font-bold text-base text-[var(--text-primary)] flex items-center gap-2">
@@ -359,7 +359,7 @@ export default function ProfilePage({ user, onUserUpdated, onOpenAuth }) {
 
       {/* ── My Posts ──────────────────────────────────── */}
       <div className="space-y-3 animate-slide-up stagger-3">
-        <div className="flex items-center justify-between px-1">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-1 gap-3">
           <h3 className="font-['Outfit'] font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-[var(--accent-primary)]" />
             My Vibes
@@ -388,10 +388,10 @@ export default function ProfilePage({ user, onUserUpdated, onOpenAuth }) {
             ))}
           </div>
         ) : (
-          <div className="glass-card rounded-3xl p-10 text-center space-y-4 border border-[var(--border-glass)] animate-scale-bounce">
+          <div className="glass-card rounded-3xl p-10 text-center space-y-4 border border-[var(--border-glass)]">
             <div
-              className="inline-flex p-4 rounded-3xl animate-float-slow"
-              style={{ background: 'var(--accent-gradient)', boxShadow: `0 8px 24px var(--accent-glow)` }}
+              className="inline-flex p-4 rounded-3xl"
+              style={{ background: 'var(--accent-gradient)' }}
             >
               <Sparkles className="w-7 h-7 text-white" />
             </div>

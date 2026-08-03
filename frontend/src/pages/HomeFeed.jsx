@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Sparkles, RefreshCw, PlusCircle, Zap, EyeOff,
   TrendingUp, Users, Bot, Star, Flame,
-  ChevronRight, Play, Globe, Shield, Cpu,
+  ChevronRight, Play, Globe, Shield, Cpu, Clock,
   Hash, Heart, Loader2
 } from 'lucide-react';
 import PostCard from '../components/PostCard';
@@ -78,6 +78,13 @@ function FeatureBadge({ icon: Icon, label, colorCls }) {
   );
 }
 
+const HERO_FEATURES = [
+  { icon: Bot, title: 'Free Groq AI', description: 'Boost your content with instant smart suggestions.' },
+  { icon: EyeOff, title: 'Zero Ad Noise', description: 'A clean creator-first feed with no distractions.' },
+  { icon: Shield, title: 'Enterprise Privacy', description: 'Secure messaging and trusted creative space.' },
+  { icon: Clock, title: 'Chronological Feed', description: 'Latest posts shown in the true time order.' },
+];
+
 /* ─────────────────────────────────────
    Story Circle — real users from suggestions API
 ───────────────────────────────────── */
@@ -90,7 +97,7 @@ function StoryCircle({ user, isCreate, onClick, index }) {
     >
       <div className="relative">
         {isCreate ? (
-          <div className="w-14 h-14 rounded-full flex items-center justify-center bg-[var(--bg-secondary)] border-2 border-dashed border-[var(--accent-primary)] group-hover:scale-110 transition-transform shadow-lg">
+          <div className="w-14 h-14 rounded-full flex items-center justify-center bg-[var(--bg-secondary)] border-2 border-dashed border-[var(--accent-primary)] group-hover:scale-110 transition-transform shadow-sm">
             <PlusCircle className="w-6 h-6 text-[var(--accent-primary)]" />
           </div>
         ) : (
@@ -107,7 +114,7 @@ function StoryCircle({ user, isCreate, onClick, index }) {
         )}
         {/* Online indicator for real users */}
         {!isCreate && user.is_online && (
-          <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-[var(--bg-primary)] badge-glow" />
+          <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-[var(--bg-primary)]" />
         )}
       </div>
       <span className="text-[10px] font-semibold text-[var(--text-secondary)] max-w-[56px] truncate text-center">
@@ -122,21 +129,14 @@ function StoryCircle({ user, isCreate, onClick, index }) {
 ───────────────────────────────────── */
 function TrendingWidget({ trends, trendsLoading, onOpenCreate, user, onOpenAuth }) {
   return (
-    <div className="glass-card rounded-2xl p-4 border border-[var(--border-glass)] space-y-3 animate-slide-up stagger-4">
+    <div className="glass-card rounded-2xl p-4 border border-[var(--border-glass)] space-y-3 animate-slide-up stagger-4 shadow-sm">
       <div className="flex items-center justify-between">
         <h3 className="font-['Outfit'] font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-[var(--accent-primary)]" />
           Trending Vibes
         </h3>
         <span className="text-[10px] text-[var(--text-muted)] font-medium flex items-center gap-1">
-          <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse inline-block" />
-          Live
-        </span>
-      </div>
-
-      {trendsLoading ? (
-        <div className="space-y-2">
-          {[1, 2, 3, 4].map((n) => (
+              <span className="w-1.5 h-1.5 bg-red-400 rounded-full inline-block" />
             <div key={n} className="flex items-center justify-between p-2 rounded-xl">
               <div className="w-24 h-3 skeleton rounded-lg" />
               <div className="w-10 h-3 skeleton rounded-lg" />
@@ -156,7 +156,7 @@ function TrendingWidget({ trends, trendsLoading, onOpenCreate, user, onOpenAuth 
               style={{ animationDelay: `${i * 45}ms` }}
             >
               <div className="flex items-center space-x-2">
-                <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${i < 2 ? 'bg-orange-400 animate-pulse' : 'bg-[var(--accent-primary)]'}`} />
+                <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${i < 2 ? 'bg-orange-400' : 'bg-[var(--accent-primary)]'}`} />
                 <span className="text-xs font-semibold text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors truncate max-w-[100px]">
                   {t.tag}
                 </span>
@@ -307,7 +307,7 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
 
       {/* ── HERO BANNER ──────────────────────────────── */}
       <div
-        className="relative rounded-3xl overflow-hidden border border-[var(--border-glass)] shadow-2xl animate-slide-up"
+        className="relative rounded-3xl overflow-hidden border border-[var(--border-glass)] shadow-sm animate-slide-up"
         style={{ background: `linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%)` }}
       >
         {/* Floating particles */}
@@ -319,16 +319,30 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
         <Particle className="particle-6 bg-pink-400"                   style={{ top: '50%', left: '90%' }} />
 
         {/* Glow orbs */}
-        <div className="absolute -top-16 -left-16 w-64 h-64 rounded-full opacity-20 blur-3xl pointer-events-none animate-neon-glow"
+        <div className="absolute -top-16 -left-16 w-64 h-64 rounded-full opacity-15 blur-3xl pointer-events-none"
           style={{ background: 'var(--accent-primary)' }} />
-        <div className="absolute -bottom-12 -right-12 w-52 h-52 rounded-full opacity-15 blur-3xl pointer-events-none animate-neon-glow"
-          style={{ background: 'var(--accent-secondary)', animationDelay: '2s' }} />
+        <div className="absolute -bottom-12 -right-12 w-52 h-52 rounded-full opacity-12 blur-3xl pointer-events-none"
+          style={{ background: 'var(--accent-secondary)' }} />
 
         <div className="relative z-10 p-6 sm:p-8">
-          {/* Feature Badges - Reduced clutter */}
-          <div className="flex flex-wrap gap-2 mb-5 animate-slide-up stagger-1">
-            <FeatureBadge icon={Bot}    label="Free Groq AI"       colorCls="bg-purple-500/15 text-purple-400 border-purple-500/30" />
-            <FeatureBadge icon={EyeOff} label="Zero Ad Noise"      colorCls="bg-emerald-500/15 text-emerald-400 border-emerald-500/30" />
+          {/* Hero benefits grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+            {HERO_FEATURES.map((feature) => {
+              const Icon = feature.icon;
+              return (
+                <div key={feature.title} className="rounded-2xl border border-[var(--border-glass)] bg-[var(--bg-secondary)]/90 p-4 shadow-sm">
+                  <div className="flex items-center justify-between mb-2">
+                    <Icon className="w-5 h-5 text-[var(--accent-primary)]" />
+                  </div>
+                  <p className="text-[10px] uppercase tracking-[0.24em] font-semibold text-[var(--accent-secondary)] mb-1">
+                    {feature.title}
+                  </p>
+                  <p className="text-[11px] leading-snug text-[var(--text-secondary)]">
+                    {feature.description}
+                  </p>
+                </div>
+              );
+            })}
           </div>
 
           {/* Headline - Improved Hierarchy & Contrast */}
@@ -336,10 +350,10 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
             <h1 className="font-['Outfit'] font-black text-3xl sm:text-5xl tracking-tight leading-tight text-[var(--text-primary)] mb-3">
               The Social Platform{' '}
               <br className="hidden sm:block" />
-              <span className="gradient-text">Built for Creators</span>
+              <span className="text-[var(--accent-primary)]">Built for Creators</span>
               <span className="cursor-blink text-[var(--accent-primary)]"> |</span>
             </h1>
-            <p className="text-base sm:text-lg text-[var(--text-primary)] opacity-80 max-w-lg leading-relaxed font-medium">
+            <p className="text-base sm:text-lg text-[var(--text-primary)] opacity-95 max-w-lg leading-relaxed font-medium">
               No manipulation. No ads. Just pure connection powered by{' '}
               <strong className="text-[var(--accent-primary)]">Groq Llama 3 AI</strong> — 100% free forever.
             </p>
@@ -365,17 +379,17 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-wrap gap-3 animate-slide-up stagger-4">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 animate-slide-up stagger-4">
             <button
               onClick={user ? onOpenCreate : onOpenAuth}
-              className="btn-gradient btn-glow-pulse px-5 py-2.5 rounded-2xl text-white font-bold text-sm flex items-center space-x-2 shadow-xl"
+              className="btn-gradient px-5 py-2.5 rounded-2xl text-white font-bold text-sm flex items-center justify-center space-x-2 shadow-sm"
             >
               <PlusCircle className="w-4 h-4" />
               <span>{user ? 'Drop Your Vibe ✨' : 'Join Free — No Ads Ever'}</span>
             </button>
             <button
               onClick={onOpenWhyVibely}
-              className="px-5 py-2.5 rounded-2xl border border-[var(--border-accent)] text-[var(--text-primary)] font-semibold text-sm flex items-center space-x-2 hover:bg-[var(--bg-secondary)] transition-all"
+              className="px-5 py-2.5 rounded-2xl border border-[var(--border-accent)] text-[var(--text-primary)] font-semibold text-sm flex items-center justify-center space-x-2 hover:bg-[var(--bg-secondary)] transition-all"
             >
               <Play className="w-4 h-4 text-[var(--accent-primary)]" />
               <span>Why Choose Vibely</span>
@@ -385,10 +399,10 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
       </div>
 
       {/* ── STORY TRAY — real user suggestions ──────── */}
-      <div className="glass-card rounded-2xl border border-[var(--border-glass)] p-4 animate-slide-up stagger-2">
+      <div className="glass-card rounded-2xl border border-[var(--border-glass)] p-4 animate-slide-up stagger-2 shadow-sm">
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-['Outfit'] font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
-            <Star className="w-4 h-4 text-amber-400 animate-pulse" />
+            <Star className="w-4 h-4 text-amber-400" />
             Vibe Stories
           </h2>
           {storyLoading && <Loader2 className="w-3.5 h-3.5 text-[var(--text-muted)] animate-spin" />}
@@ -422,8 +436,8 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
       </div>
 
       {/* ── CREATE POST TRIGGER ──────────────────────── */}
-      <div className="relative glass-card rounded-2xl border border-[var(--border-glass)] p-4 overflow-hidden animate-slide-up stagger-3">
-        <div className="absolute inset-0 shimmer-sweep pointer-events-none" />
+      <div className="relative glass-card rounded-2xl border border-[var(--border-glass)] p-4 overflow-hidden animate-slide-up stagger-3 shadow-sm">
+        <div className="absolute inset-0 pointer-events-none" />
         <div className="relative flex items-center justify-between gap-4">
           <div className="flex items-center space-x-3 flex-1 min-w-0">
             <div className="relative shrink-0">
@@ -433,7 +447,7 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
                 className="w-10 h-10 rounded-full object-cover border-2 border-[var(--accent-primary)]/40"
               />
               {user && (
-                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-[var(--bg-primary)] badge-glow" />
+                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-[var(--bg-primary)]" />
               )}
             </div>
             <div className="min-w-0">
@@ -461,9 +475,9 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
             </div>
             <button
               onClick={user ? onOpenCreate : onOpenAuth}
-              className="btn-gradient px-4 py-2 rounded-xl text-white font-bold text-xs flex items-center space-x-1.5 shadow-lg"
+              className="btn-gradient px-4 py-2 rounded-xl text-white font-bold text-xs flex items-center space-x-1.5"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-float-slow" />
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
               <span>Post Vibe</span>
             </button>
           </div>
@@ -481,13 +495,9 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
                 onClick={() => setActiveFilter(f.id)}
                 className={`relative px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center space-x-1.5 ${
                   isActive
-                    ? 'text-white shadow-lg'
+                    ? 'text-white bg-[var(--accent-primary)] shadow-sm'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] bg-[var(--bg-secondary)] border border-[var(--border-glass)]'
                 }`}
-                style={isActive ? {
-                  background: 'var(--accent-gradient)',
-                  boxShadow: `0 4px 14px var(--accent-glow)`
-                } : {}}
               >
                 <span>{f.icon}</span>
                 <span>{f.label}</span>
@@ -509,7 +519,7 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
       </div>
 
       {/* ── POSTS + TRENDING LAYOUT ─────────────────── */}
-      <div className="flex gap-5">
+      <div className="flex flex-col xl:flex-row gap-5">
 
         {/* ── Post Feed ───────────── */}
         <div className="flex-1 min-w-0">
@@ -550,9 +560,9 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
             </div>
           ) : (
             /* Empty State */
-            <div className="glass-card rounded-3xl p-10 text-center space-y-4 border border-[var(--border-glass)] animate-scale-bounce">
+            <div className="glass-card rounded-3xl p-10 text-center space-y-4 border border-[var(--border-glass)]">
               <div
-                className="inline-flex p-4 rounded-3xl animate-float-slow"
+                className="inline-flex p-4 rounded-3xl"
                 style={{ background: 'var(--accent-gradient)', boxShadow: `0 8px 24px var(--accent-glow)` }}
               >
                 <Sparkles className="w-8 h-8 text-white" />
@@ -569,7 +579,7 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
               </div>
               <button
                 onClick={user ? onOpenCreate : onOpenAuth}
-                className="btn-gradient btn-glow-pulse px-6 py-2.5 rounded-2xl text-white font-bold text-sm inline-flex items-center space-x-2"
+                className="btn-gradient px-6 py-2.5 rounded-2xl text-white font-bold text-sm inline-flex items-center space-x-2 shadow-sm"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>Create First Vibe ✨</span>

@@ -39,7 +39,7 @@ export default function WhyVibelyModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-md animate-fade-in">
-      <div className="glass-panel w-full max-w-2xl rounded-3xl border border-[var(--border-glass)] p-4 sm:p-6 space-y-6 shadow-2xl relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto transition-colors duration-300">
+      <div className="glass-panel w-full max-w-2xl rounded-3xl border border-[var(--border-glass)] p-4 sm:p-6 space-y-6 shadow-sm relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto transition-colors duration-300">
 
         {/* Close Button */}
         <button
@@ -52,7 +52,7 @@ export default function WhyVibelyModal({ isOpen, onClose }) {
         {/* Header */}
         <div className="text-center space-y-2 pt-2">
           <div className="inline-flex p-3 rounded-2xl bg-[var(--accent-primary)]/15 border border-[var(--accent-primary)]/30 text-[var(--accent-primary)] mb-1">
-            <Sparkles className="w-7 h-7 animate-pulse" />
+            <Sparkles className="w-7 h-7" />
           </div>
           <h3 className="font-['Outfit'] font-black text-xl sm:text-3xl text-[var(--text-primary)]">
             Why Choose <span className="gradient-text">Vibely</span> Over Legacy Socials?
@@ -82,7 +82,7 @@ export default function WhyVibelyModal({ isOpen, onClose }) {
         <div className="pt-2 border-t border-[var(--border-glass)] text-center">
           <button
             onClick={onClose}
-            className="btn-gradient px-6 py-2.5 rounded-xl text-white font-semibold text-xs sm:text-sm shadow-lg"
+            className="btn-gradient px-6 py-2.5 rounded-xl text-white font-semibold text-xs sm:text-sm shadow-sm"
           >
             Start Vibing Now 🚀
           </button>
