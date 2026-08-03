@@ -3,8 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#0b0f19" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Vibely" />
     <meta name="description" content="Vibely - AI-Integrated Social Platform with 100% Free Scalable Features" />
     
     <!-- Google Fonts: Outfit & Inter -->
@@ -17,8 +21,9 @@
     
     <title>Vibely — Connect Your Vibe</title>
   </head>
-  <body class="bg-[#0b0f19] text-gray-100 font-['Inter',sans-serif] antialiased selection:bg-purple-500 selection:text-white">
+  <body class="bg-[var(--bg-primary)] text-[var(--text-primary)] font-['Inter',sans-serif] antialiased selection:bg-[var(--accent-primary)] selection:text-white transition-colors duration-300">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
+

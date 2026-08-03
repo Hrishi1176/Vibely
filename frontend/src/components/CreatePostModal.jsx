@@ -112,30 +112,30 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated, quota,
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
-      <div className="glass-panel w-full max-w-lg rounded-2xl border border-gray-800 p-5 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-md animate-fade-in">
+      <div className="glass-panel w-full max-w-lg rounded-3xl border border-[var(--border-glass)] p-4 sm:p-6 space-y-4 shadow-2xl relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto transition-colors duration-300">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-800 pb-3">
+        <div className="flex items-center justify-between border-b border-[var(--border-glass)] pb-3">
           <div className="flex items-center space-x-2">
-            <Sparkles className="w-5 h-5 text-purple-400" />
-            <h3 className="font-['Outfit'] font-bold text-lg text-gray-100">Create New Vibe</h3>
+            <Sparkles className="w-5 h-5 text-[var(--accent-primary)]" />
+            <h3 className="font-['Outfit'] font-bold text-lg text-[var(--text-primary)]">Create New Vibe</h3>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-200">
+          <button onClick={onClose} className="p-1 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* AI Helper Toggle Banner */}
-        <div className="p-3 rounded-xl bg-purple-900/20 border border-purple-500/30 flex items-center justify-between text-xs">
+        <div className="p-3 rounded-xl bg-[var(--accent-primary)]/15 border border-[var(--accent-primary)]/30 flex items-center justify-between text-xs">
           <div className="flex items-center space-x-2">
-            <Sparkles className="w-4 h-4 text-purple-400" />
-            <span className="text-purple-200">Need inspiration? Use <strong>Groq Llama 3 AI</strong></span>
+            <Sparkles className="w-4 h-4 text-[var(--accent-primary)] shrink-0" />
+            <span className="text-[var(--text-primary)]">Need inspiration? Use <strong>Groq Llama 3 AI</strong></span>
           </div>
           <button
             type="button"
             onClick={() => setShowAiHelper(!showAiHelper)}
-            className="px-2.5 py-1 rounded-lg bg-purple-600 text-white font-medium text-xs hover:bg-purple-500"
+            className="px-2.5 py-1 rounded-lg btn-gradient text-white font-medium text-xs shadow-md shrink-0"
           >
             {showAiHelper ? 'Close AI' : 'Generate'}
           </button>
@@ -143,29 +143,29 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated, quota,
 
         {/* AI Generator Panel */}
         {showAiHelper && (
-          <div className="p-3 rounded-xl bg-gray-900/80 border border-purple-500/20 space-y-2 text-xs">
-            <label className="block text-gray-300 font-medium">What is your post about?</label>
+          <div className="p-3 rounded-xl bg-[var(--bg-secondary)] border border-[var(--accent-primary)]/20 space-y-2 text-xs">
+            <label className="block text-[var(--text-secondary)] font-medium">What is your post about?</label>
             <div className="flex items-center space-x-2">
               <input
                 type="text"
                 value={aiPrompt}
                 onChange={(e) => setAiPrompt(e.target.value)}
                 placeholder="e.g. Hiking on mountains on a sunny Sunday"
-                className="flex-1 bg-gray-950 border border-gray-800 rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-purple-500"
+                className="flex-1 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-primary)]"
               />
               <button
                 type="button"
                 onClick={handleGenerateAI}
                 disabled={loadingAi || (quota && quota.ai_remaining <= 0)}
-                className="btn-gradient px-3 py-2 rounded-lg text-white font-medium flex items-center space-x-1 disabled:opacity-50"
+                className="btn-gradient px-3 py-2 rounded-lg text-white font-medium flex items-center space-x-1 disabled:opacity-50 shadow-md shrink-0"
               >
                 {loadingAi ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
                 <span>Auto Writer</span>
               </button>
             </div>
             {quota && (
-              <p className="text-[10px] text-gray-400">
-                Daily AI Credits remaining: <strong className="text-purple-400">{quota.ai_remaining} / {quota.ai_max}</strong>
+              <p className="text-[10px] text-[var(--text-muted)]">
+                Daily AI Credits remaining: <strong className="text-[var(--accent-primary)]">{quota.ai_remaining} / {quota.ai_max}</strong>
               </p>
             )}
           </div>
@@ -179,17 +179,17 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated, quota,
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="What's happening? Share your vibe..."
-              className="w-full bg-gray-900/70 border border-gray-800 rounded-xl p-3 text-sm text-gray-200 focus:outline-none focus:border-purple-500 transition-colors placeholder:text-gray-600 resize-none"
+              className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl p-3 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors placeholder:text-[var(--text-muted)] resize-none"
             />
           </div>
 
           {/* Image Upload / AI Image Generator Bar */}
           <div className="space-y-2.5">
-            <label className="block text-xs font-semibold text-gray-300">Attach Image / Photo</label>
+            <label className="block text-xs font-semibold text-[var(--text-secondary)]">Attach Image / Photo</label>
             
             <div className="flex flex-wrap items-center gap-2">
               {/* Option A: Upload Local Image File */}
-              <label className="cursor-pointer px-3 py-2 rounded-xl bg-gray-900 hover:bg-gray-800 border border-gray-800 text-gray-200 text-xs font-medium flex items-center space-x-1.5 transition-colors">
+              <label className="cursor-pointer px-3 py-2 rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--scrollbar-thumb)] border border-[var(--border-glass)] text-[var(--text-primary)] text-xs font-medium flex items-center space-x-1.5 transition-colors">
                 <Upload className="w-4 h-4 text-emerald-400" />
                 <span>{uploadingFile ? 'Uploading...' : 'Upload Local Photo'}</span>
                 <input
@@ -206,28 +206,28 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated, quota,
                 type="button"
                 onClick={handleGenerateAIImage}
                 disabled={loadingAiImage || (quota && quota.ai_remaining <= 0)}
-                className="px-3 py-2 rounded-xl bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 text-purple-300 text-xs font-medium flex items-center space-x-1.5 transition-colors disabled:opacity-50"
+                className="px-3 py-2 rounded-xl bg-[var(--accent-primary)]/15 hover:bg-[var(--accent-primary)]/30 border border-[var(--accent-primary)]/40 text-[var(--accent-primary)] text-xs font-medium flex items-center space-x-1.5 transition-colors disabled:opacity-50"
               >
-                {loadingAiImage ? <RefreshCw className="w-4 h-4 animate-spin text-purple-400" /> : <Wand2 className="w-4 h-4 text-purple-400" />}
+                {loadingAiImage ? <RefreshCw className="w-4 h-4 animate-spin text-[var(--accent-primary)]" /> : <Wand2 className="w-4 h-4 text-[var(--accent-primary)]" />}
                 <span>Generate AI Art</span>
               </button>
             </div>
 
             {/* URL Fallback Input */}
             <div className="flex items-center space-x-2">
-              <ImageIcon className="w-4 h-4 text-gray-400 shrink-0" />
+              <ImageIcon className="w-4 h-4 text-[var(--text-muted)] shrink-0" />
               <input
                 type="url"
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
                 placeholder="Or paste Image URL (optional)"
-                className="flex-1 bg-gray-900/70 border border-gray-800 rounded-xl px-3 py-1.5 text-xs text-gray-200 focus:outline-none focus:border-purple-500"
+                className="flex-1 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-primary)]"
               />
             </div>
 
             {/* Image Preview Thumbnail */}
             {imageUrl && (
-              <div className="relative rounded-xl overflow-hidden border border-purple-500/30 max-h-48 group">
+              <div className="relative rounded-xl overflow-hidden border border-[var(--border-glass)] max-h-48 group">
                 <img src={imageUrl} alt="Attached Preview" className="w-full h-44 object-cover" />
                 <button
                   type="button"
@@ -241,17 +241,17 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated, quota,
             )}
 
             {/* Vibe Tag Selector */}
-            <div className="flex items-center space-x-2 text-xs pt-1">
-              <span className="text-gray-400">Vibe Tag:</span>
+            <div className="flex items-center space-x-2 text-xs pt-1 overflow-x-auto no-scrollbar">
+              <span className="text-[var(--text-muted)] shrink-0">Vibe Tag:</span>
               {['#Vibely', '#Tech', '#Chill', '#Creative', '#Energy'].map((tag) => (
                 <button
                   type="button"
                   key={tag}
                   onClick={() => setVibeTag(tag)}
-                  className={`px-2.5 py-1 rounded-lg transition-colors ${
+                  className={`px-2.5 py-1 rounded-lg shrink-0 transition-colors ${
                     vibeTag === tag
-                      ? 'bg-purple-600 text-white font-semibold'
-                      : 'bg-gray-800 text-gray-400 hover:text-gray-200'
+                      ? 'btn-gradient text-white font-semibold shadow-sm'
+                      : 'bg-[var(--bg-secondary)] text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                   }`}
                 >
                   {tag}
@@ -261,9 +261,9 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated, quota,
           </div>
 
           {/* Submit */}
-          <div className="flex items-center justify-between pt-2 border-t border-gray-800">
+          <div className="flex items-center justify-between pt-2 border-t border-[var(--border-glass)]">
             {quota && (
-              <span className="text-xs text-gray-400">
+              <span className="text-xs text-[var(--text-muted)]">
                 Posts remaining today: <strong className="text-emerald-400">{quota.posts_remaining} / {quota.posts_max}</strong>
               </span>
             )}
@@ -271,7 +271,7 @@ export default function CreatePostModal({ isOpen, onClose, onPostCreated, quota,
             <button
               type="submit"
               disabled={submitting}
-              className="btn-gradient px-5 py-2.5 rounded-xl text-white font-semibold text-sm flex items-center space-x-2 disabled:opacity-50"
+              className="btn-gradient px-5 py-2.5 rounded-xl text-white font-semibold text-sm flex items-center space-x-2 disabled:opacity-50 shadow-md"
             >
               {submitting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               <span>Publish Post</span>

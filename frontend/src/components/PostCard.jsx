@@ -193,7 +193,7 @@ export default function PostCard({ post, currentUser, onPostUpdated }) {
 
           {/* AI Badge with shimmer */}
           {post.ai_generated && (
-            <div className="relative hidden sm:flex items-center space-x-1 px-2.5 py-1 rounded-full border text-xs overflow-hidden"
+            <div className="relative flex items-center space-x-1 px-2.5 py-1 rounded-full border text-[10px] sm:text-xs overflow-hidden"
               style={{ background: 'var(--accent-primary)15', borderColor: 'var(--accent-primary)40', color: 'var(--accent-primary)' }}>
               <div className="absolute inset-0 shimmer-sweep pointer-events-none" />
               <Sparkles className="w-3 h-3" />

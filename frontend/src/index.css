@@ -170,15 +170,25 @@
   }
 
   /* =========================================================
-     BASE STYLES
+     BASE STYLES & MOBILE APP NATIVE FEEL
      ========================================================= */
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+
   body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
     font-family: 'Inter', system-ui, sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
+    overscroll-behavior-y: none;
     transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  button, a, input, select, textarea {
+    touch-action: manipulation;
   }
 
   h1, h2, h3, h4, h5, h6 {
