@@ -30,8 +30,9 @@ class Settings(BaseSettings):
     MAX_DAILY_IMAGES: int = 10
 
     class Config:
-        env_file = ".env"
+        env_file = [".env", "../.env", "backend/.env"]
         env_file_encoding = "utf-8"
         case_sensitive = True
 
 settings = Settings()
+

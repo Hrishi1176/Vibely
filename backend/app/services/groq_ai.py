@@ -1,3 +1,4 @@
+import os
 import logging
 from groq import Groq
 from app.core.config import settings
@@ -6,9 +7,10 @@ logger = logging.getLogger("vibely.ai")
 
 class GroqAIService:
     @classmethod
-    def get_client(self):
-        if settings.GROQ_API_KEY:
-            return Groq(api_key=settings.GROQ_API_KEY)
+    def get_client(cls):
+        api_key = settings.GROQ_API_KEY or os.getenv("GROQ_API_KEY") or os.environ.get("GROQ_API_KEY")
+        if api_key and api_key.strip():
+            return Groq(api_key=api_key.strip())
         return None
 
     @classmethod

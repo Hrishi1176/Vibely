@@ -242,8 +242,17 @@ def google_auth(req: GoogleAuthRequest, response: Response, db: Session = Depend
         db.commit()
         db.refresh(user)
     else:
+        modified = False
         if not user.google_id:
             user.google_id = google_sub
+            modified = True
+        if avatar_url and (not user.avatar_url or "dicebear.com" in user.avatar_url or user.avatar_url != avatar_url):
+            user.avatar_url = avatar_url
+            modified = True
+        if full_name and (not user.full_name or user.full_name == user.username):
+            user.full_name = full_name
+            modified = True
+        if modified:
             db.commit()
             db.refresh(user)
 

@@ -116,12 +116,12 @@ def toggle_follow(
     if existing_follow:
         db.delete(existing_follow)
         db.commit()
-        return {"following": False, "message": f"Unfollowed {target_user.username}"}
+        return {"following": False, "is_following": False, "message": f"Unfollowed {target_user.username}"}
     else:
         new_follow = Follow(follower_id=current_user.id, following_id=user_id)
         db.add(new_follow)
         db.commit()
-        return {"following": True, "message": f"Following {target_user.username}"}
+        return {"following": True, "is_following": True, "message": f"Following {target_user.username}"}
 
 
 # ── Wildcard route LAST — must be after all specific /users/* routes ──────────

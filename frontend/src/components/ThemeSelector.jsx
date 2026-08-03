@@ -30,7 +30,7 @@ export default function ThemeSelector() {
 
       {isOpen && (
         <div
-          className="absolute right-0 mt-2 w-72 glass-panel rounded-2xl border border-[var(--border-glass)] p-3 shadow-2xl z-50 animate-slide-up space-y-3"
+          className="fixed inset-x-3 top-16 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-2 sm:w-72 glass-panel rounded-2xl border border-[var(--border-glass)] p-3.5 shadow-2xl z-50 animate-slide-up space-y-3 max-h-[80vh] overflow-y-auto transition-colors duration-300"
           style={{ boxShadow: `0 20px 60px rgba(0,0,0,0.35), 0 0 20px var(--accent-glow)` }}
         >
           {/* Header */}
