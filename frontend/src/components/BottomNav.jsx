@@ -13,7 +13,7 @@ export default function BottomNav({ activeTab, setActiveTab, onOpenCreate }) {
   ];
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur-2xl border-t border-[var(--border-glass)] px-2 sm:px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] flex items-center justify-around overflow-x-auto no-scrollbar shadow-2xl transition-colors duration-300">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur-2xl border-t border-[var(--border-glass)] px-3 sm:px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] flex items-center justify-between gap-2 overflow-x-auto no-scrollbar shadow-sm transition-colors duration-300">
       {tabsLeft.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
@@ -37,7 +37,7 @@ export default function BottomNav({ activeTab, setActiveTab, onOpenCreate }) {
       <button
         onClick={onOpenCreate}
         aria-label="Create Vibe"
-        className="btn-gradient p-3.5 rounded-full text-white shadow-xl -translate-y-3.5 border-4 border-[var(--bg-primary)] hover:scale-110 active:scale-95 transition-all flex items-center justify-center shrink-0"
+        className="btn-gradient p-3.5 rounded-full text-white shadow-sm -translate-y-2 border-2 border-[var(--bg-primary)] hover:scale-105 active:scale-95 transition-transform duration-200 flex items-center justify-center shrink-0"
       >
         <PlusCircle className="w-6 h-6" />
       </button>

@@ -25,11 +25,11 @@ export default function Sidebar({ activeTab, setActiveTab, quota }) {
                 onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all group ${
                   isActive
-                    ? 'text-white shadow-lg'
+                    ? 'text-white shadow-sm'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'
                 }`}
                 style={isActive
-                  ? { background: 'var(--accent-gradient)', boxShadow: `0 4px 14px var(--accent-glow)` }
+                  ? { background: 'var(--accent-gradient)', boxShadow: '0 10px 25px rgba(0,0,0,0.16)' }
                   : {}
                 }
               >

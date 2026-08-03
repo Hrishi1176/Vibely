@@ -258,7 +258,7 @@ export default function PostCard({ post, currentUser, onPostUpdated }) {
         >
           {copied
             ? <Check  className="w-4 h-4 text-emerald-400" />
-            : <Share2 className="w-4 h-4 icon-bounce" />
+            : <Share2 className="w-4 h-4" />
           }
           <span>{copied ? 'Copied!' : 'Share'}</span>
         </button>
@@ -270,13 +270,13 @@ export default function PostCard({ post, currentUser, onPostUpdated }) {
             saved ? 'text-amber-400' : 'hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'
           }`}
         >
-          <Bookmark className={`w-4 h-4 icon-bounce ${saved ? 'fill-amber-400' : ''}`} />
+          <Bookmark className={`w-4 h-4 ${saved ? 'fill-amber-400' : ''}`} />
         </button>
       </div>
 
       {/* ── Comments Drawer ──────────────────────── */}
       {showComments && (
-        <div className="mt-4 pt-3 border-t border-[var(--border-glass)] space-y-3 animate-slide-up">
+        <div className="mt-4 pt-3 border-t border-[var(--border-glass)] space-y-3">
           {loadingComments ? (
             <div className="space-y-2">
               {[1, 2].map((n) => (
@@ -287,7 +287,7 @@ export default function PostCard({ post, currentUser, onPostUpdated }) {
             <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
               {comments.map((c, i) => (
                 <div key={c.id}
-                  className="p-2.5 rounded-xl border text-xs space-y-0.5 animate-slide-up"
+                  className="p-2.5 rounded-xl border text-xs space-y-0.5"
                   style={{
                     background: 'var(--bg-secondary)',
                     borderColor: 'var(--border-glass)',

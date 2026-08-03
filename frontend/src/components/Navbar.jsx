@@ -5,12 +5,12 @@ import ThemeSelector from './ThemeSelector';
 export default function Navbar({ user, quota, onOpenCreate, onOpenAuth, onLogout, activeTab, setActiveTab, onOpenWhyVibely }) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[var(--border-glass)] bg-[var(--bg-primary)]/90 backdrop-blur-xl transition-colors duration-300">
-      <div className="max-w-6xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between overflow-x-auto md:overflow-visible no-scrollbar gap-2 sm:gap-4">
+      <div className="max-w-6xl mx-auto w-full px-3 sm:px-4 h-16 flex flex-wrap items-center justify-between gap-3 overflow-x-auto md:overflow-visible no-scrollbar">
 
         {/* Brand Logo */}
         <div
           onClick={() => setActiveTab('feed')}
-          className="flex items-center space-x-2 cursor-pointer group shrink-0"
+          className="flex items-center gap-2 min-w-0 cursor-pointer group shrink-0"
         >
           <div className="relative">
             <div className="absolute inset-0 rounded-xl bg-[var(--accent-primary)] opacity-20 blur-md group-hover:opacity-40 transition-opacity" />
@@ -23,7 +23,7 @@ export default function Navbar({ user, quota, onOpenCreate, onOpenAuth, onLogout
           <span className="font-['Outfit'] text-xl sm:text-2xl font-extrabold tracking-tight gradient-text">
             Vibely
           </span>
-          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30 badge-glow">
+          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
             100% Free
           </span>
         </div>
@@ -52,7 +52,7 @@ export default function Navbar({ user, quota, onOpenCreate, onOpenAuth, onLogout
         )}
 
         {/* Action Buttons */}
-        <div className="flex items-center space-x-1.5 sm:space-x-3 shrink-0">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 shrink-0">
           <ThemeSelector />
 
           <button

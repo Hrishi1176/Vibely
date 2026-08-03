@@ -24,14 +24,14 @@ export default function ThemeSelector() {
         className="p-2 rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--scrollbar-thumb)] border border-[var(--border-glass)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all flex items-center space-x-1.5 text-xs font-medium focus:outline-none"
         title="Change App Theme"
       >
-        <Palette className="w-4 h-4 text-[var(--accent-primary)] animate-pulse" />
+        <Palette className="w-4 h-4 text-[var(--accent-primary)]" />
         <span className="hidden sm:inline text-[var(--text-secondary)]">Theme</span>
       </button>
 
       {isOpen && (
         <div
-          className="fixed inset-x-3 top-16 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-2 sm:w-72 glass-panel rounded-2xl border border-[var(--border-glass)] p-3.5 shadow-2xl z-[100] animate-slide-up space-y-3 max-h-[80vh] overflow-y-auto transition-colors duration-300"
-          style={{ boxShadow: `0 20px 60px rgba(0,0,0,0.35), 0 0 20px var(--accent-glow)` }}
+          className="fixed inset-x-3 top-16 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-2 sm:w-72 glass-panel rounded-2xl border border-[var(--border-glass)] p-3.5 shadow-sm z-[100] space-y-3 max-h-[80vh] overflow-y-auto transition-colors duration-300"
+          style={{ boxShadow: '0 20px 40px rgba(0,0,0,0.14)' }}
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-[var(--border-glass)] pb-2.5">
@@ -109,7 +109,7 @@ function ThemeOption({ t, active, onChange }) {
       onClick={() => onChange(t.id)}
       className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-xs transition-all ${
         isActive
-          ? 'border-[var(--accent-primary)] text-[var(--text-primary)] font-semibold shadow-lg'
+          ? 'border-[var(--accent-primary)] text-[var(--text-primary)] font-semibold shadow-sm'
           : 'border-[var(--border-glass)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-accent)]'
       }`}
       style={isActive ? { background: `${t.primary}22` } : { background: 'var(--bg-secondary)' }}

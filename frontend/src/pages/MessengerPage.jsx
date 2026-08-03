@@ -261,7 +261,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
         </p>
         <button
           onClick={onOpenAuth}
-          className="btn-gradient px-5 py-2.5 rounded-xl text-white font-medium text-xs inline-flex items-center space-x-2 shadow-lg"
+          className="btn-gradient px-5 py-2.5 rounded-xl text-white font-medium text-xs inline-flex items-center space-x-2 shadow-sm transition-transform hover:-translate-y-px"
         >
           <UserIcon className="w-4 h-4" />
           <span>Sign In / Register</span>
@@ -284,7 +284,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
   ];
 
   return (
-    <div className="h-[calc(100vh-9.5rem)] md:h-[78vh] glass-panel rounded-3xl border border-[var(--border-glass)] overflow-hidden flex flex-col md:flex-row shadow-2xl relative transition-colors duration-300">
+    <div className="min-h-[calc(100vh-12rem)] md:h-[78vh] glass-panel rounded-3xl border border-[var(--border-glass)] overflow-hidden flex flex-col md:flex-row shadow-sm relative transition-colors duration-300">
       
       {/* Left Column: Conversations List */}
       <div className={`w-full md:w-80 border-r border-[var(--border-glass)] flex flex-col bg-[var(--bg-tertiary)]/70 ${activeUser ? 'hidden md:flex' : 'flex'}`}>
@@ -336,7 +336,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                       className="w-10 h-10 rounded-full border border-[var(--border-glass)] object-cover"
                     />
                     <Circle className={`w-3 h-3 absolute bottom-0 right-0 border-2 border-[var(--bg-primary)] rounded-full ${
-                      isUserOnline ? 'text-emerald-400 fill-emerald-400 animate-pulse' : 'text-[var(--text-muted)] fill-[var(--text-muted)]'
+                      isUserOnline ? 'text-emerald-400 fill-emerald-400' : 'text-[var(--text-muted)] fill-[var(--text-muted)]'
                     }`} />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -386,7 +386,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                   />
                   <Circle className={`w-3 h-3 absolute bottom-0 right-0 border-2 border-[var(--bg-primary)] rounded-full ${
                     (onlineUsers[activeUser.id] ?? activeUser.is_online)
-                      ? 'text-emerald-400 fill-emerald-400 animate-pulse'
+                      ? 'text-emerald-400 fill-emerald-400'
                       : 'text-[var(--text-muted)] fill-[var(--text-muted)]'
                   }`} />
                 </div>
@@ -419,7 +419,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                   return (
                     <div
                       key={m.id}
-                      className={`group relative flex flex-col ${isMine ? 'items-end' : 'items-start'} animate-slide-up`}
+                      className={`group relative flex flex-col ${isMine ? 'items-end' : 'items-start'} transition-all duration-200`}
                     >
                       <div className="relative flex items-center space-x-2">
                         {/* Action Menu (Delete/Edit) */}
@@ -433,7 +433,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                             </button>
 
                             {actionMenuMessageId === m.id && (
-                              <div className="absolute right-0 bottom-full mb-1 w-44 glass-panel rounded-2xl border border-[var(--border-glass)] p-1.5 shadow-xl z-20 space-y-1 text-xs">
+                              <div className="absolute right-0 bottom-full mb-1 w-44 glass-panel rounded-2xl border border-[var(--border-glass)] p-1.5 shadow-sm z-20 space-y-1 text-xs">
                                 {!m.deleted_by_sender && (
                                   <button
                                     onClick={() => startEditingMessage(m)}
@@ -466,8 +466,8 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                         <div
                           className={`max-w-[85%] sm:max-w-[70%] p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed relative ${
                             isMine
-                              ? 'btn-gradient text-white rounded-br-none shadow-lg'
-                              : 'bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-[var(--text-primary)] rounded-bl-none shadow-md'
+                              ? 'btn-gradient text-white rounded-br-none shadow-sm'
+                              : 'bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-[var(--text-primary)] rounded-bl-none shadow-sm'
                           }`}
                         >
                           {m.image_url && (
@@ -487,7 +487,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                         </div>
 
                         {/* Quick Hover Reaction Picker Bar */}
-                        <div className={`absolute -top-7 ${isMine ? 'right-0' : 'left-0'} hidden group-hover:flex items-center gap-1 bg-[var(--bg-primary)] border border-[var(--border-glass)] rounded-full px-2 py-1 shadow-xl z-10 text-xs`}>
+                        <div className={`absolute -top-7 ${isMine ? 'right-0' : 'left-0'} hidden group-hover:flex items-center gap-1 bg-[var(--bg-primary)] border border-[var(--border-glass)] rounded-full px-2 py-1 shadow-sm z-10 text-xs`}>
                           {['❤️', '👍', '😂', '🔥', '😮'].map((emoji) => (
                             <button
                               key={emoji}
@@ -528,7 +528,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                             <button
                               type="button"
                               onClick={saveEdit}
-                              className="btn-gradient px-3 py-1.5 rounded-xl text-white text-xs font-semibold shadow-md transition"
+                              className="btn-gradient px-3 py-1.5 rounded-xl text-white text-xs font-semibold shadow-sm transition"
                             >
                               Save
                             </button>
@@ -549,7 +549,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
             </div>
 
             {/* Smart Quick Replies Bar */}
-            <div className="px-3 py-2 border-t border-[var(--border-glass)] bg-[var(--bg-primary)]/40 flex items-center space-x-2 overflow-x-auto no-scrollbar">
+            <div className="px-3 py-2 border-t border-[var(--border-glass)] bg-[var(--bg-primary)]/60 flex flex-wrap gap-2 items-center overflow-x-auto no-scrollbar">
               <span className="text-[10px] text-[var(--accent-primary)] font-semibold shrink-0 uppercase tracking-wider flex items-center gap-1">
                 <Sparkles className="w-3 h-3" /> Quick AI Reply:
               </span>
@@ -603,7 +603,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
               <button
                 type="submit"
                 disabled={sending || (!newMessage.trim() && !imagePreview)}
-                className="btn-gradient p-2.5 min-h-[38px] min-w-[38px] rounded-xl text-white disabled:opacity-50 transition-opacity shrink-0 shadow-md flex items-center justify-center"
+                className="btn-gradient p-2.5 min-h-[38px] min-w-[38px] rounded-xl text-white disabled:opacity-50 transition-opacity shrink-0 shadow-sm flex items-center justify-center"
               >
                 {sending ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </button>
@@ -631,7 +631,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center text-center p-6 text-xs text-[var(--text-muted)] space-y-3">
             <div className="p-4 rounded-3xl bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] border border-[var(--border-glass)]">
-              <MessageSquare className="w-10 h-10 animate-pulse" />
+              <MessageSquare className="w-10 h-10" />
             </div>
             <h3 className="font-['Outfit'] font-bold text-[var(--text-primary)] text-base">Your Vibely Direct Messages</h3>
             <p className="max-w-xs text-[var(--text-muted)] leading-relaxed">

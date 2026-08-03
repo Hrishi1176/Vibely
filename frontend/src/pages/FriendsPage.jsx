@@ -74,7 +74,7 @@ export default function FriendsPage({ user, onOpenAuth, onOpenMessenger }) {
 
   if (!user) {
     return (
-      <div className="glass-panel rounded-2xl p-8 text-center space-y-4 border border-[var(--border-glass)]">
+      <div className="glass-panel rounded-2xl p-8 text-center space-y-4 border border-[var(--border-glass)] shadow-sm">
         <div className="inline-flex p-3 rounded-full bg-[var(--accent-primary)]/15 text-[var(--accent-primary)]">
           <Users className="w-8 h-8" />
         </div>
@@ -84,7 +84,7 @@ export default function FriendsPage({ user, onOpenAuth, onOpenMessenger }) {
         </p>
         <button
           onClick={onOpenAuth}
-          className="btn-gradient px-5 py-2.5 rounded-xl text-white font-medium text-xs inline-flex items-center space-x-2 shadow-lg"
+          className="btn-gradient px-5 py-2.5 rounded-xl text-white font-medium text-xs inline-flex items-center space-x-2 shadow-sm transition-transform hover:-translate-y-px"
         >
           <UserIcon className="w-4 h-4" />
           <span>Sign In / Register</span>
@@ -115,7 +115,7 @@ export default function FriendsPage({ user, onOpenAuth, onOpenMessenger }) {
           </div>
         </div>
 
-        <form onSubmit={handleSearchSubmit} className="flex gap-2">
+        <form onSubmit={handleSearchSubmit} className="flex flex-col sm:flex-row gap-2">
           <div className="relative flex-1">
             <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3.5 top-3" />
             <input
@@ -126,7 +126,7 @@ export default function FriendsPage({ user, onOpenAuth, onOpenMessenger }) {
               className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)]"
             />
           </div>
-          <button type="submit" className="btn-gradient px-4 py-2.5 rounded-xl text-white text-xs font-semibold shadow-md">
+          <button type="submit" className="btn-gradient px-4 py-2.5 rounded-xl text-white text-xs font-semibold shadow-sm transition-transform hover:-translate-y-px">
             Search
           </button>
         </form>
@@ -176,7 +176,7 @@ export default function FriendsPage({ user, onOpenAuth, onOpenMessenger }) {
                       className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-[var(--border-glass)] object-cover"
                     />
                     <Circle className={`w-3.5 h-3.5 absolute bottom-0 right-0 border-2 border-[var(--bg-primary)] rounded-full ${
-                      isUserOnline ? 'text-emerald-400 fill-emerald-400 animate-pulse' : 'text-[var(--text-muted)] fill-[var(--text-muted)]'
+                      isUserOnline ? 'text-emerald-400 fill-emerald-400' : 'text-[var(--text-muted)] fill-[var(--text-muted)]'
                     }`} />
                   </div>
                   <div className="min-w-0">

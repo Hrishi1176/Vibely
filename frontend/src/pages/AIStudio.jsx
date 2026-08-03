@@ -129,7 +129,7 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center space-x-3">
             <div className="p-3 rounded-2xl bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] shrink-0">
-              <Bot className="w-6 h-6 animate-pulse" />
+              <Bot className="w-6 h-6" />
             </div>
             <div>
               <h2 className="font-['Outfit'] font-extrabold text-lg sm:text-xl text-[var(--text-primary)]">VibeAI Studio Suite</h2>
@@ -150,7 +150,7 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* Box 1: Interactive Chat with VibeAI */}
-        <div className="glass-panel rounded-2xl p-4 border border-[var(--border-glass)] flex flex-col h-[400px] sm:h-[520px]">
+        <div className="glass-panel rounded-2xl p-4 border border-[var(--border-glass)] flex flex-col min-h-[420px] sm:min-h-[520px]">
           <div className="flex items-center space-x-2 pb-3 border-b border-[var(--border-glass)]">
             <Bot className="w-5 h-5 text-[var(--accent-primary)]" />
             <h3 className="font-['Outfit'] font-semibold text-sm text-[var(--text-primary)]">Chat with VibeAI Companion</h3>
@@ -166,8 +166,8 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
                 <div
                   className={`max-w-[85%] p-3 rounded-2xl text-xs whitespace-pre-line leading-relaxed ${
                     m.sender === 'user'
-                      ? 'btn-gradient text-white rounded-br-none shadow-md'
-                      : 'bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-[var(--text-primary)] rounded-bl-none shadow-md'
+                      ? 'btn-gradient text-white rounded-br-none shadow-sm'
+                      : 'bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-[var(--text-primary)] rounded-bl-none shadow-sm'
                   }`}
                 >
                   {m.text}
@@ -242,7 +242,7 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
               <button
                 type="submit"
                 disabled={imageGenLoading || (quota && quota.ai_remaining <= 0)}
-                className="w-full btn-gradient py-2.5 rounded-xl text-white font-semibold text-xs flex items-center justify-center space-x-2 disabled:opacity-50 shadow-md"
+                className="w-full btn-gradient py-2.5 rounded-xl text-white font-semibold text-xs flex items-center justify-center space-x-2 disabled:opacity-50 shadow-sm"
               >
                 {imageGenLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
                 <span>Generate AI Image Art</span>
@@ -252,7 +252,7 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
             {/* AI Image Result Preview & Publish Button */}
             {generatedImageUrl && (
               <div className="space-y-3 pt-2 border-t border-[var(--border-glass)]">
-                <div className="relative rounded-2xl overflow-hidden border border-[var(--border-glass)] shadow-xl group">
+                <div className="relative rounded-2xl overflow-hidden border border-[var(--border-glass)] shadow-sm group">
                   <img src={generatedImageUrl} alt="AI Art" className="w-full h-56 object-cover" />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                     <button
@@ -266,7 +266,7 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
                       href={generatedImageUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-xl btn-gradient text-white text-xs font-medium flex items-center space-x-1 shadow-md"
+                      className="p-2 rounded-xl btn-gradient text-white text-xs font-medium flex items-center space-x-1 shadow-sm"
                     >
                       <ExternalLink className="w-4 h-4" />
                       <span>Open High Res</span>
@@ -284,7 +284,7 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
                       vibeTag: '#Creative'
                     });
                   }}
-                  className="w-full btn-gradient py-2.5 rounded-xl text-white font-semibold text-xs flex items-center justify-center space-x-2 shadow-lg"
+                  className="w-full btn-gradient py-2.5 rounded-xl text-white font-semibold text-xs flex items-center justify-center space-x-2 shadow-sm"
                 >
                   <PlusCircle className="w-4 h-4 text-emerald-300" />
                   <span>Publish Image as Vibe Post 🚀</span>
@@ -322,7 +322,7 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
                       onClick={() => setVibeTone(t)}
                       className={`py-1.5 px-2 rounded-lg text-xs font-medium capitalize transition-all ${
                         vibeTone === t
-                          ? 'btn-gradient text-white font-semibold shadow-md'
+                          ? 'btn-gradient text-white font-semibold shadow-sm'
                           : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-glass)] hover:text-[var(--text-primary)]'
                       }`}
                     >
@@ -335,7 +335,7 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
               <button
                 type="submit"
                 disabled={genLoading || (quota && quota.ai_remaining <= 0)}
-                className="w-full btn-gradient py-2.5 rounded-xl text-white font-semibold text-xs flex items-center justify-center space-x-2 disabled:opacity-50 shadow-md"
+                className="w-full btn-gradient py-2.5 rounded-xl text-white font-semibold text-xs flex items-center justify-center space-x-2 disabled:opacity-50 shadow-sm"
               >
                 {genLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
                 <span>Generate Smart Post</span>
@@ -361,7 +361,7 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
                       vibeTag: generatedResult.vibe_tag || '#Vibely'
                     });
                   }}
-                  className="w-full btn-gradient py-2 rounded-xl text-white font-semibold text-xs flex items-center justify-center space-x-1.5 shadow-lg mt-2"
+                  className="w-full btn-gradient py-2 rounded-xl text-white font-semibold text-xs flex items-center justify-center space-x-1.5 shadow-sm mt-2"
                 >
                   <PlusCircle className="w-4 h-4 text-emerald-300" />
                   <span>Publish Caption as Vibe Post 🚀</span>
