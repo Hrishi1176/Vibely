@@ -83,8 +83,18 @@ _safe_migrate_sqlite()
 
 
 
+# Custom client IP resolver for rate limiting behind reverse proxies (like Railway/Vercel)
+def get_client_ip(request) -> str:
+    forwarded_for = request.headers.get("X-Forwarded-For")
+    if forwarded_for:
+        return forwarded_for.split(",")[0].strip()
+    real_ip = request.headers.get("X-Real-IP")
+    if real_ip:
+        return real_ip.strip()
+    return request.client.host if request.client else "127.0.0.1"
+
 # Rate Limiter
-limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
+limiter = Limiter(key_func=get_client_ip, default_limits=["120/minute"])
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -105,10 +115,19 @@ origins = [
     "http://localhost:8000",
 ]
 
+# Allow custom production domains from environment variable
+import os
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS")
+if allowed_origins_env:
+    for o in allowed_origins_env.split(","):
+        clean_origin = o.strip()
+        if clean_origin:
+            origins.append(clean_origin)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_origin_regex=r"https?://.*",
+    allow_origin_regex=r"https://.*\.vercel\.app|https://.*\.railway\.app|https?://.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
