@@ -2,6 +2,7 @@ import logging
 import sqlite3
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import os
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -58,10 +59,6 @@ def _safe_migrate_sqlite():
             if "image_url" not in msg_cols:
                 cur.execute("ALTER TABLE direct_messages ADD COLUMN image_url TEXT")
                 migrations.append("direct_messages.image_url")
-# Ensure uploads directory exists and serve it
-uploads_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads")
-os.makedirs(os.path.join(uploads_path, "messages"), exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=uploads_path), name="uploads")
             if "is_edited" not in msg_cols:
                 cur.execute("ALTER TABLE direct_messages ADD COLUMN is_edited BOOLEAN DEFAULT 0")
                 migrations.append("direct_messages.is_edited")
@@ -108,6 +105,10 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     docs_url=f"{settings.API_V1_STR}/docs"
 )
+
+uploads_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads")
+os.makedirs(os.path.join(uploads_path, "messages"), exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=uploads_path), name="uploads")
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
