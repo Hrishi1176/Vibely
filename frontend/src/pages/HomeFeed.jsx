@@ -325,24 +325,23 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
           style={{ background: 'var(--accent-secondary)', animationDelay: '2s' }} />
 
         <div className="relative z-10 p-6 sm:p-8">
-          {/* Feature Badges */}
+          {/* Feature Badges - Reduced clutter */}
           <div className="flex flex-wrap gap-2 mb-5 animate-slide-up stagger-1">
             <FeatureBadge icon={Bot}    label="Free Groq AI"       colorCls="bg-purple-500/15 text-purple-400 border-purple-500/30" />
             <FeatureBadge icon={EyeOff} label="Zero Ad Noise"      colorCls="bg-emerald-500/15 text-emerald-400 border-emerald-500/30" />
-            <FeatureBadge icon={Shield} label="Enterprise Privacy"  colorCls="bg-blue-500/15 text-blue-400 border-blue-500/30" />
-            <FeatureBadge icon={Globe}  label="Chronological Feed"  colorCls="bg-amber-500/15 text-amber-400 border-amber-500/30" />
           </div>
 
-          {/* Headline */}
+          {/* Headline - Improved Hierarchy & Contrast */}
           <div className="mb-6 animate-slide-up stagger-2">
-            <h1 className="font-['Outfit'] font-black text-2xl sm:text-4xl leading-tight text-[var(--text-primary)] mb-2">
+            <h1 className="font-['Outfit'] font-black text-3xl sm:text-5xl tracking-tight leading-tight text-[var(--text-primary)] mb-3">
               The Social Platform{' '}
+              <br className="hidden sm:block" />
               <span className="gradient-text">Built for Creators</span>
               <span className="cursor-blink text-[var(--accent-primary)]"> |</span>
             </h1>
-            <p className="text-sm text-[var(--text-secondary)] max-w-md leading-relaxed">
+            <p className="text-base sm:text-lg text-[var(--text-primary)] opacity-80 max-w-lg leading-relaxed font-medium">
               No manipulation. No ads. Just pure connection powered by{' '}
-              <strong className="text-[var(--text-primary)]">Groq Llama 3 AI</strong> — 100% free forever.
+              <strong className="text-[var(--accent-primary)]">Groq Llama 3 AI</strong> — 100% free forever.
             </p>
           </div>
 

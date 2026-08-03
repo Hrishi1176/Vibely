@@ -68,7 +68,7 @@ export default function Navbar({ user, quota, onOpenCreate, onOpenAuth, onLogout
             <>
               <button
                 onClick={onOpenCreate}
-                className="btn-gradient btn-glow-pulse px-3 py-2 min-h-[38px] rounded-xl text-white font-semibold text-xs sm:text-sm flex items-center space-x-1.5"
+                className="btn-gradient px-3 py-2 min-h-[38px] rounded-xl text-white font-semibold text-xs sm:text-sm flex items-center space-x-1.5"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span className="hidden sm:inline">New Vibe</span>
@@ -99,7 +99,7 @@ export default function Navbar({ user, quota, onOpenCreate, onOpenAuth, onLogout
           ) : (
             <button
               onClick={onOpenAuth}
-              className="btn-gradient btn-glow-pulse px-3.5 py-2 min-h-[38px] rounded-xl text-white font-semibold text-xs sm:text-sm flex items-center space-x-1.5"
+              className="btn-gradient px-3.5 py-2 min-h-[38px] rounded-xl text-white font-semibold text-xs sm:text-sm flex items-center space-x-1.5"
             >
               <UserIcon className="w-4 h-4" />
               <span>Sign In</span>

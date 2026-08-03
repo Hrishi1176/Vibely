@@ -37,7 +37,7 @@ export default function BottomNav({ activeTab, setActiveTab, onOpenCreate }) {
       <button
         onClick={onOpenCreate}
         aria-label="Create Vibe"
-        className="btn-gradient btn-glow-pulse p-3.5 rounded-full text-white shadow-2xl -translate-y-3.5 border-4 border-[var(--bg-primary)] hover:scale-110 active:scale-95 transition-all flex items-center justify-center shrink-0"
+        className="btn-gradient p-3.5 rounded-full text-white shadow-xl -translate-y-3.5 border-4 border-[var(--bg-primary)] hover:scale-110 active:scale-95 transition-all flex items-center justify-center shrink-0"
       >
         <PlusCircle className="w-6 h-6" />
       </button>
