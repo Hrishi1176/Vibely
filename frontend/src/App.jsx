@@ -95,16 +95,18 @@ export default function App() {
 
       
       {/* Top Header */}
-      <Navbar
-        user={user}
-        quota={quota}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onOpenCreate={() => { setPostDraft(null); setIsCreateOpen(true); }}
-        onOpenAuth={() => setIsAuthOpen(true)}
-        onOpenWhyVibely={() => setIsWhyVibelyOpen(true)}
-        onLogout={handleLogout}
-      />
+      <div className={activeTab === 'messenger' ? 'hidden md:block' : 'block'}>
+        <Navbar
+          user={user}
+          quota={quota}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          onOpenCreate={() => { setPostDraft(null); setIsCreateOpen(true); }}
+          onOpenAuth={() => setIsAuthOpen(true)}
+          onOpenWhyVibely={() => setIsWhyVibelyOpen(true)}
+          onLogout={handleLogout}
+        />
+      </div>
 
       {/* Main App Layout */}
       <div className="max-w-6xl w-full mx-auto px-3 sm:px-4 py-4 sm:py-6 flex gap-6 flex-1 mb-20 lg:mb-0">

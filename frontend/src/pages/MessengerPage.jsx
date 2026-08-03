@@ -401,7 +401,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                     <span>@{activeUser.username}</span>
                     <span>·</span>
                     <span className={(onlineUsers[activeUser.id] ?? activeUser.is_online) ? 'text-emerald-400 font-medium' : 'text-[var(--text-muted)]'}>
-                      {(onlineUsers[activeUser.id] ?? activeUser.is_online) ? 'Online' : `Last seen ${formatLastSeen(activeUser.last_login_at)}`}
+                      {(onlineUsers[activeUser.id] ?? activeUser.is_online) ? 'Online' : `Last seen ${formatLastSeen(activeUser.last_seen)}`}
                     </span>
                   </p>
                 </div>
