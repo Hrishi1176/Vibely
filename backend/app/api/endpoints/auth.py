@@ -2,14 +2,16 @@ from typing import Optional, List
 import random
 import string
 import re
+import requests
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
 from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.security import verify_password, get_password_hash, create_access_token
 from app.models.models import User
-from app.schemas.schemas import UserRegister, Token, UserResponse
+from app.schemas.schemas import UserRegister, Token, UserResponse, GoogleAuthRequest
 from app.api.deps import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
@@ -146,16 +148,106 @@ def register(user_in: UserRegister, response: Response, db: Session = Depends(ge
 
 @router.post("/login", response_model=Token)
 def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.username == form_data.username.lower()).first()
-    if not user or not verify_password(form_data.password, user.hashed_password):
+    identifier = form_data.username.lower().strip()
+    user = db.query(User).filter(or_(User.username == identifier, User.email == identifier)).first()
+    if not user or not user.hashed_password or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail="Incorrect username/email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
     access_token = create_access_token(subject=user.id)
 
+    is_local = settings.DATABASE_URL.startswith("sqlite")
+    cookie_samesite = "lax" if is_local else "none"
+    cookie_secure = False if is_local else True
+
+    response.set_cookie(
+        key="vibely_token",
+        value=access_token,
+        httponly=True,
+        samesite=cookie_samesite,
+        secure=cookie_secure,
+        max_age=86400 * 7,
+        path="/"
+    )
+
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@router.post("/google", response_model=Token)
+def google_auth(req: GoogleAuthRequest, response: Response, db: Session = Depends(get_db)):
+    google_email = None
+    google_sub = None
+    full_name = req.full_name or ""
+    avatar_url = req.avatar_url
+
+    token = req.id_token or req.credential
+    if token:
+        try:
+            google_res = requests.get(f"https://oauth2.googleapis.com/tokeninfo?id_token={token}", timeout=5)
+            if google_res.status_code == 200:
+                data = google_res.json()
+                google_email = data.get("email")
+                google_sub = data.get("sub")
+                if not full_name:
+                    full_name = data.get("name") or data.get("given_name") or ""
+                if not avatar_url:
+                    avatar_url = data.get("picture")
+        except Exception as err:
+            print("Google token verification warning:", err)
+    
+    if not google_email and req.email:
+        google_email = req.email
+    if not google_sub and req.sub:
+        google_sub = req.sub
+    if not google_sub and google_email:
+        google_sub = f"google_{google_email}"
+
+    if not google_email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Could not verify Google authentication token or missing email."
+        )
+
+    google_email = google_email.lower().strip()
+
+    user = db.query(User).filter(
+        or_(
+            User.google_id == google_sub,
+            User.email == google_email
+        )
+    ).first()
+
+    if not user:
+        base_handle = (full_name or google_email.split('@')[0]).strip()
+        clean_handle = re.sub(r'[^a-zA-Z0-9]', '', base_handle.lower()) or "vibely"
+        
+        username_candidate = clean_handle
+        counter = 1
+        while db.query(User).filter(User.username == username_candidate).first():
+            username_candidate = f"{clean_handle}{counter}"
+            counter += 1
+
+        new_avatar = avatar_url or f"https://api.dicebear.com/7.x/bottts/svg?seed={username_candidate}"
+        user = User(
+            username=username_candidate,
+            email=google_email,
+            hashed_password=None,
+            google_id=google_sub,
+            full_name=full_name or username_candidate,
+            avatar_url=new_avatar
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    else:
+        if not user.google_id:
+            user.google_id = google_sub
+            db.commit()
+            db.refresh(user)
+
+    access_token = create_access_token(subject=user.id)
     is_local = settings.DATABASE_URL.startswith("sqlite")
     cookie_samesite = "lax" if is_local else "none"
     cookie_secure = False if is_local else True

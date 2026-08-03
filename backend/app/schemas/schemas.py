@@ -10,8 +10,17 @@ class UserRegister(BaseModel):
     full_name: Optional[str] = None
 
 class UserLogin(BaseModel):
-    username: str
+    username: str  # Can be username or email
     password: str
+
+class GoogleAuthRequest(BaseModel):
+    id_token: Optional[str] = None
+    credential: Optional[str] = None
+    email: Optional[EmailStr] = None
+    full_name: Optional[str] = None
+    avatar_url: Optional[str] = None
+    sub: Optional[str] = None
+
 
 class Token(BaseModel):
     access_token: str

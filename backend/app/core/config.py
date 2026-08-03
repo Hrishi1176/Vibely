@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "vibely_super_secret_jwt_key_2026_change_in_production"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
+    GOOGLE_CLIENT_ID: str = ""
     
     # Database (Default to SQLite local, easily swapped to Supabase Postgres)
     DATABASE_URL: str = "sqlite:///./vibely.db"

@@ -11,6 +11,7 @@ from app.core.database import engine, Base, SessionLocal
 from app.models.models import User, Post
 from app.core.security import get_password_hash
 from app.api.endpoints import auth, posts, users, ai, quotas, messages, websocket
+from migrate import run_migrations
 
 
 # Setup logging
