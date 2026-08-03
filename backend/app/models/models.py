@@ -103,6 +103,7 @@ class DirectMessage(Base):
     receiver_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     content = Column(Text, nullable=True, default="")
     image_url = Column(Text, nullable=True)
+    file_url = Column(Text, nullable=True)
     is_edited = Column(Boolean, default=False)
     edited_at = Column(DateTime, nullable=True)
     deleted_by_sender = Column(Boolean, default=False)

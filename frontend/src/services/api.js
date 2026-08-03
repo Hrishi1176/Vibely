@@ -147,6 +147,10 @@ export const messagesAPI = {
   getConversations: () => api.get('/messages/conversations'),
   getMessages: (userId) => api.get(`/messages/${userId}`),
   sendMessage: (userId, data) => api.post(`/messages/${userId}`, data),
+  // Send audio or multipart message. `formData` should contain fields like `file` (audio Blob) and optional `content`.
+  sendAudioMessage: (userId, formData) => api.post(`/messages/${userId}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
   updateMessage: (messageId, content) => api.patch(`/messages/${messageId}`, { content }),
   deleteMessage: (messageId, scope = 'me') => api.delete(`/messages/${messageId}?scope=${scope}`),
 };

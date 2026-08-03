@@ -19,6 +19,14 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
   const [loadingConvos, setLoadingConvos] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [sending, setSending] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const [recordedBlob, setRecordedBlob] = useState(null);
+  const [recordedUrl, setRecordedUrl] = useState(null);
+  const [recordingStart, setRecordingStart] = useState(0);
+  const [recordingDuration, setRecordingDuration] = useState(0);
+  const recordingTimerRef = useRef(null);
   const [searchFilter, setSearchFilter] = useState('');
   const [reactionsMap, setReactionsMap] = useState({});
 
@@ -164,6 +172,107 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
     } else {
       setSending(false);
     }
+  };
+
+  const handleToggleRecording = async () => {
+    if (isRecording) {
+      // stop recording
+      try {
+        mediaRecorderRef.current.stop();
+      } catch (err) {
+        console.error('Error stopping recorder', err);
+        setIsRecording(false);
+      }
+      return;
+    }
+
+    // start recording
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      toast.error('Microphone access is not supported in this browser.');
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunksRef.current = [];
+      const recorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = recorder;
+
+      recorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) audioChunksRef.current.push(e.data);
+      };
+
+      recorder.onstop = () => {
+        setIsRecording(false);
+        if (recordingTimerRef.current) {
+          clearInterval(recordingTimerRef.current);
+          recordingTimerRef.current = null;
+        }
+        try {
+          const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+          setRecordedBlob(audioBlob);
+          const url = URL.createObjectURL(audioBlob);
+          setRecordedUrl(url);
+          const durationSec = Math.max(1, Math.round((Date.now() - recordingStart) / 1000));
+          setRecordingDuration(durationSec);
+        } catch (err) {
+          console.error('Failed to finalize recording', err);
+          toast.error('Recording failed.');
+        }
+      };
+
+      recorder.start();
+      setIsRecording(true);
+      setRecordingStart(Date.now());
+      recordingTimerRef.current = setInterval(() => {
+        setRecordingDuration(Math.round((Date.now() - recordingStart) / 1000));
+      }, 500);
+    } catch (err) {
+      console.error('Microphone permission error', err);
+      toast.error('Unable to access microphone. Check permissions.');
+    }
+  };
+
+  const sendRecordedAudio = async () => {
+    if (!recordedBlob || !activeUser?.id) return;
+    const file = new File([recordedBlob], `voice-${Date.now()}.webm`, { type: recordedBlob.type });
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('content', 'Voice note');
+
+    setSending(true);
+    try {
+      const sentViaWs = sendWebSocketAudio
+        ? sendWebSocketAudio(activeUser.id, recordedBlob, { filename: file.name, content: 'Voice note' })
+        : false;
+
+      if (!sentViaWs) {
+        const res = await messagesAPI.sendAudioMessage(activeUser.id, formData);
+        setMessages((prev) => [...prev, res.data]);
+        fetchConversations();
+      }
+      // cleanup preview
+      setRecordedBlob(null);
+      if (recordedUrl) {
+        URL.revokeObjectURL(recordedUrl);
+        setRecordedUrl(null);
+      }
+      setRecordingDuration(0);
+    } catch (err) {
+      console.error('Failed to send recorded audio', err);
+      toast.error('Failed to send voice note.');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const discardRecordedAudio = () => {
+    setRecordedBlob(null);
+    if (recordedUrl) {
+      URL.revokeObjectURL(recordedUrl);
+      setRecordedUrl(null);
+    }
+    setRecordingDuration(0);
   };
 
 
@@ -470,9 +579,15 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                               : 'bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-[var(--text-primary)] rounded-bl-none shadow-sm'
                           }`}
                         >
-                          {m.image_url && (
+                          {(m.image_url || m.file_url) && (
                             <div className="mb-2 rounded-xl overflow-hidden border border-white/10">
-                              <img src={m.image_url} alt="Shared attachment" className="max-h-52 w-full object-cover" />
+                              {m.file_url && (/\.webm$|\.wav$|\.ogg$|\.mp3$/i).test(m.file_url) ? (
+                                <audio controls src={m.file_url} className="w-full" />
+                              ) : m.image_url ? (
+                                <img src={m.image_url} alt="Shared attachment" className="max-h-52 w-full object-cover" />
+                              ) : (
+                                <a href={m.file_url} className="text-xs text-[var(--accent-primary)] underline">Download attachment</a>
+                              )}
                             </div>
                           )}
 
@@ -585,9 +700,9 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
 
               <button
                 type="button"
-                onClick={() => handleSendMessage('🎙️ [Voice Note Preview]')}
-                className="p-2 min-h-[38px] min-w-[38px] text-[var(--text-muted)] hover:text-[var(--accent-primary)] hover:bg-[var(--bg-primary)] rounded-xl transition-colors flex items-center justify-center"
-                title="Send Voice Note"
+                onClick={handleToggleRecording}
+                className={`p-2 min-h-[38px] min-w-[38px] rounded-xl transition-colors flex items-center justify-center ${isRecording ? 'bg-red-600 text-white' : 'text-[var(--text-muted)] hover:text-[var(--accent-primary)] hover:bg-[var(--bg-primary)]'}`}
+                title={isRecording ? 'Stop recording and send' : 'Record Voice Note'}
               >
                 <Mic className="w-4 h-4" />
               </button>
@@ -608,6 +723,26 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                 {sending ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </button>
             </form>
+
+            {isRecording && (
+              <div className="px-4 pb-2 pt-2 text-xs text-[var(--text-muted)] flex items-center gap-2">
+                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                <span>Recording — {Math.floor(recordingDuration / 60)}:{String(recordingDuration % 60).padStart(2, '0')}</span>
+              </div>
+            )}
+
+            {recordedUrl && (
+              <div className="px-4 pb-3 pt-2 space-y-2">
+                <div className="flex items-center gap-3">
+                  <audio controls src={recordedUrl} className="w-full" />
+                  <div className="text-xs text-[var(--text-muted)]">{Math.floor(recordingDuration/60)}:{String(recordingDuration%60).padStart(2,'0')}</div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button onClick={sendRecordedAudio} className="btn-gradient px-3 py-1.5 rounded-xl text-white text-xs font-semibold">Send Recording</button>
+                  <button onClick={discardRecordedAudio} className="px-3 py-1.5 rounded-xl border border-[var(--border-glass)] text-xs">Discard</button>
+                </div>
+              </div>
+            )}
 
             {imagePreview && (
               <div className="px-4 pb-3 pt-2 space-y-2">

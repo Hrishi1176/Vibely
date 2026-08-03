@@ -1,6 +1,8 @@
 from datetime import datetime
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
+import os
+import shutil
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_, desc
 from app.core.database import get_db
@@ -45,6 +47,7 @@ def _serialize_message(msg: DirectMessage, current_user: User) -> Optional[dict]
         "receiver_id": msg.receiver_id,
         "content": msg.content,
         "image_url": msg.image_url,
+        "file_url": getattr(msg, 'file_url', None),
         "is_edited": msg.is_edited,
         "edited_at": msg.edited_at,
         "deleted_by_sender": msg.deleted_by_sender,
@@ -130,7 +133,14 @@ def get_message_thread(user_id: int, db: Session = Depends(get_db), current_user
     return [msg for msg in serialized if msg is not None]
 
 @router.post("/{user_id}", response_model=DirectMessageResponse, status_code=status.HTTP_201_CREATED)
-def send_message(user_id: int, msg_in: DirectMessageCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def send_message(
+    user_id: int,
+    content: Optional[str] = Form(None),
+    image_url: Optional[str] = Form(None),
+    file: UploadFile = File(None),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     if user_id == current_user.id:
         raise HTTPException(status_code=400, detail="You cannot send messages to yourself")
 
@@ -141,9 +151,24 @@ def send_message(user_id: int, msg_in: DirectMessageCreate, db: Session = Depend
     new_msg = DirectMessage(
         sender_id=current_user.id,
         receiver_id=user_id,
-        content=msg_in.content,
-        image_url=msg_in.image_url
+        content=(content or "")
     )
+
+    # Handle optional image_url (form) and uploaded file
+    if image_url:
+        new_msg.image_url = image_url
+
+    if file is not None:
+        uploads_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', 'uploads', 'messages')
+        # normalize path
+        uploads_dir = os.path.normpath(uploads_dir)
+        os.makedirs(uploads_dir, exist_ok=True)
+        filename = f"msg_{current_user.id}_{user_id}_{int(datetime.utcnow().timestamp())}_{file.filename}"
+        dest_path = os.path.join(uploads_dir, filename)
+        with open(dest_path, 'wb') as out_f:
+            shutil.copyfileobj(file.file, out_f)
+        # Expose via /uploads/messages/<filename>
+        new_msg.file_url = f"/uploads/messages/{filename}"
     db.add(new_msg)
     db.commit()
     db.refresh(new_msg)

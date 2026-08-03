@@ -120,6 +120,30 @@ export function WebSocketProvider({ children, user }) {
     return false;
   };
 
+  // Send binary audio over the websocket. Protocol: first send a JSON metadata frame
+  // with type 'chat_message_binary' then send the raw audio Blob as a separate frame.
+  const sendWebSocketAudio = (receiverId, audioBlob, meta = {}) => {
+    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      try {
+        const metadata = {
+          type: 'chat_message_binary',
+          receiver_id: receiverId,
+          filename: meta.filename || 'voice.webm',
+          mime_type: audioBlob.type || 'audio/webm',
+          content: meta.content || '',
+        };
+        socketRef.current.send(JSON.stringify(metadata));
+        // send Blob directly as binary frame
+        socketRef.current.send(audioBlob);
+        return true;
+      } catch (err) {
+        console.error('Failed to send audio via websocket', err);
+        return false;
+      }
+    }
+    return false;
+  };
+
   const sendTypingStatus = (receiverId, isTyping) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
       socketRef.current.send(JSON.stringify({
@@ -137,6 +161,7 @@ export function WebSocketProvider({ children, user }) {
       typingMap,
       incomingMessage,
       sendWebSocketMessage,
+      sendWebSocketAudio,
       sendTypingStatus
     }}>
       {children}
