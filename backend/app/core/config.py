@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     
     # AI Engine (Groq Free Tier)
     GROQ_API_KEY: str = ""
-    GROQ_MODEL: str = "llama3-8b-8192"
+    GROQ_MODEL: str = "llama-3.1-8b-instant"
     
     # Default welcome/greeting text (can be customized from .env)
     DEFAULT_BIO: str = "Welcome to Vibely! Share your world, connect your vibe ✨"
