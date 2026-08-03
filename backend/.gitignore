@@ -1,0 +1,20 @@
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Database
+*.db
+*.sqlite
+vibely.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
