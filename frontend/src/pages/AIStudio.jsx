@@ -125,22 +125,22 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
     <div className="space-y-6 pb-12">
       
       {/* Header Banner */}
-      <div className="glass-card rounded-2xl p-5 border border-purple-500/30 bg-gradient-to-r from-purple-900/30 to-indigo-900/30">
-        <div className="flex items-center justify-between">
+      <div className="glass-card rounded-2xl p-4 sm:p-5 border border-[var(--border-glass)]">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center space-x-3">
-            <div className="p-3 rounded-2xl bg-purple-500/20 text-purple-300">
+            <div className="p-3 rounded-2xl bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] shrink-0">
               <Bot className="w-6 h-6 animate-pulse" />
             </div>
             <div>
-              <h2 className="font-['Outfit'] font-extrabold text-xl text-gray-100">VibeAI Studio Suite</h2>
-              <p className="text-xs text-purple-300">Free Llama 3 AI Text & Pollinations AI Image Studio</p>
+              <h2 className="font-['Outfit'] font-extrabold text-lg sm:text-xl text-[var(--text-primary)]">VibeAI Studio Suite</h2>
+              <p className="text-xs text-[var(--text-muted)]">Free Llama 3 AI Text & Pollinations AI Image Studio</p>
             </div>
           </div>
 
           {quota && (
-            <div className="px-3.5 py-1.5 rounded-xl bg-gray-900/80 border border-purple-500/30 text-xs text-gray-200 flex items-center space-x-2">
-              <Zap className="w-4 h-4 text-purple-400" />
-              <span>Credits Remaining: <strong className="text-purple-300 font-bold">{quota.ai_remaining} / {quota.ai_max}</strong></span>
+            <div className="px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-xs text-[var(--text-primary)] flex items-center space-x-2 shrink-0">
+              <Zap className="w-4 h-4 text-[var(--accent-primary)]" />
+              <span>Credits Remaining: <strong className="text-[var(--accent-primary)] font-bold">{quota.ai_remaining} / {quota.ai_max}</strong></span>
             </div>
           )}
         </div>
@@ -150,10 +150,10 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* Box 1: Interactive Chat with VibeAI */}
-        <div className="glass-panel rounded-2xl p-4 border border-gray-800 flex flex-col h-[520px]">
-          <div className="flex items-center space-x-2 pb-3 border-b border-gray-800">
-            <Bot className="w-5 h-5 text-purple-400" />
-            <h3 className="font-['Outfit'] font-semibold text-sm text-gray-100">Chat with VibeAI Companion</h3>
+        <div className="glass-panel rounded-2xl p-4 border border-[var(--border-glass)] flex flex-col h-[400px] sm:h-[520px]">
+          <div className="flex items-center space-x-2 pb-3 border-b border-[var(--border-glass)]">
+            <Bot className="w-5 h-5 text-[var(--accent-primary)]" />
+            <h3 className="font-['Outfit'] font-semibold text-sm text-[var(--text-primary)]">Chat with VibeAI Companion</h3>
           </div>
 
           {/* Chat Messages Body */}
@@ -166,8 +166,8 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
                 <div
                   className={`max-w-[85%] p-3 rounded-2xl text-xs whitespace-pre-line leading-relaxed ${
                     m.sender === 'user'
-                      ? 'bg-purple-600 text-white rounded-br-none'
-                      : 'bg-gray-900 border border-gray-800 text-gray-200 rounded-bl-none shadow-md'
+                      ? 'btn-gradient text-white rounded-br-none shadow-md'
+                      : 'bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-[var(--text-primary)] rounded-bl-none shadow-md'
                   }`}
                 >
                   {m.text}
@@ -183,9 +183,9 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
                         vibeTag: '#Vibely'
                       });
                     }}
-                    className="mt-1 px-2.5 py-1 rounded-lg bg-purple-500/15 hover:bg-purple-500/30 border border-purple-500/30 text-purple-300 text-[10px] font-semibold flex items-center space-x-1 transition-all"
+                    className="mt-1 px-2.5 py-1 rounded-lg bg-[var(--accent-primary)]/15 hover:bg-[var(--accent-primary)]/30 border border-[var(--accent-primary)]/30 text-[var(--accent-primary)] text-[10px] font-semibold flex items-center space-x-1 transition-all"
                   >
-                    <PlusCircle className="w-3 h-3 text-purple-400" />
+                    <PlusCircle className="w-3 h-3 text-[var(--accent-primary)]" />
                     <span>Post this Vibe to Feed 🚀</span>
                   </button>
                 )}
@@ -194,8 +194,8 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
 
             {chatLoading && (
               <div className="flex justify-start">
-                <div className="p-3 rounded-2xl bg-gray-900 border border-gray-800 text-xs text-gray-400 flex items-center space-x-2">
-                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-purple-400" />
+                <div className="p-3 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-xs text-[var(--text-muted)] flex items-center space-x-2">
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-[var(--accent-primary)]" />
                   <span>VibeAI is thinking...</span>
                 </div>
               </div>
@@ -203,15 +203,15 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
           </div>
 
           {/* Chat Input Form */}
-          <form onSubmit={handleSendChat} className="flex items-center space-x-2 pt-2 border-t border-gray-800">
+          <form onSubmit={handleSendChat} className="flex items-center space-x-2 pt-2 border-t border-[var(--border-glass)]">
             <input
               type="text"
               value={inputMsg}
               onChange={(e) => setInputMsg(e.target.value)}
               placeholder="Ask VibeAI anything..."
-              className="flex-1 bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-purple-500"
+              className="flex-1 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2 text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)]"
             />
-            <button type="submit" className="btn-gradient p-2 rounded-xl text-white">
+            <button type="submit" className="btn-gradient p-2 min-h-[36px] min-w-[36px] rounded-xl text-white flex items-center justify-center">
               <Send className="w-4 h-4" />
             </button>
           </form>
@@ -221,28 +221,28 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
         <div className="space-y-6">
           
           {/* AI Image Art Generator Studio */}
-          <div className="glass-panel rounded-2xl p-5 border border-purple-500/30 space-y-4">
-            <div className="flex items-center space-x-2 pb-2 border-b border-gray-800">
-              <Wand2 className="w-5 h-5 text-purple-400" />
-              <h3 className="font-['Outfit'] font-semibold text-sm text-gray-100">AI Image Art Studio</h3>
+          <div className="glass-panel rounded-2xl p-5 border border-[var(--border-glass)] space-y-4">
+            <div className="flex items-center space-x-2 pb-2 border-b border-[var(--border-glass)]">
+              <Wand2 className="w-5 h-5 text-[var(--accent-primary)]" />
+              <h3 className="font-['Outfit'] font-semibold text-sm text-[var(--text-primary)]">AI Image Art Studio</h3>
             </div>
 
             <form onSubmit={handleGenerateAIImage} className="space-y-3">
               <div>
-                <label className="block text-xs text-gray-300 mb-1">Image Prompt / Description</label>
+                <label className="block text-xs text-[var(--text-secondary)] mb-1">Image Prompt / Description</label>
                 <input
                   type="text"
                   value={imagePrompt}
                   onChange={(e) => setImagePrompt(e.target.value)}
                   placeholder="e.g. Futuristic cyber lion with glowing purple aura 8k render"
-                  className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-purple-500"
+                  className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2 text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)]"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={imageGenLoading || (quota && quota.ai_remaining <= 0)}
-                className="w-full btn-gradient py-2.5 rounded-xl text-white font-semibold text-xs flex items-center justify-center space-x-2 disabled:opacity-50"
+                className="w-full btn-gradient py-2.5 rounded-xl text-white font-semibold text-xs flex items-center justify-center space-x-2 disabled:opacity-50 shadow-md"
               >
                 {imageGenLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
                 <span>Generate AI Image Art</span>
@@ -251,13 +251,13 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
 
             {/* AI Image Result Preview & Publish Button */}
             {generatedImageUrl && (
-              <div className="space-y-3 pt-2 border-t border-gray-800">
-                <div className="relative rounded-2xl overflow-hidden border border-purple-500/40 shadow-xl group">
+              <div className="space-y-3 pt-2 border-t border-[var(--border-glass)]">
+                <div className="relative rounded-2xl overflow-hidden border border-[var(--border-glass)] shadow-xl group">
                   <img src={generatedImageUrl} alt="AI Art" className="w-full h-56 object-cover" />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                     <button
                       onClick={copyImageLink}
-                      className="p-2 rounded-xl bg-gray-900/90 text-gray-200 hover:text-white hover:bg-gray-800 text-xs font-medium flex items-center space-x-1"
+                      className="p-2 rounded-xl bg-[var(--bg-primary)]/90 text-[var(--text-primary)] text-xs font-medium flex items-center space-x-1 shadow-md"
                     >
                       <Copy className="w-4 h-4" />
                       <span>Copy Link</span>
@@ -266,7 +266,7 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
                       href={generatedImageUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-xl bg-purple-600 text-white hover:bg-purple-500 text-xs font-medium flex items-center space-x-1"
+                      className="p-2 rounded-xl btn-gradient text-white text-xs font-medium flex items-center space-x-1 shadow-md"
                     >
                       <ExternalLink className="w-4 h-4" />
                       <span>Open High Res</span>
@@ -294,36 +294,36 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
           </div>
 
           {/* AI Caption Writer */}
-          <div className="glass-panel rounded-2xl p-5 border border-gray-800 space-y-4">
-            <div className="flex items-center space-x-2 pb-2 border-b border-gray-800">
+          <div className="glass-panel rounded-2xl p-5 border border-[var(--border-glass)] space-y-4">
+            <div className="flex items-center space-x-2 pb-2 border-b border-[var(--border-glass)]">
               <Sparkles className="w-5 h-5 text-emerald-400" />
-              <h3 className="font-['Outfit'] font-semibold text-sm text-gray-100">AI Social Caption Writer</h3>
+              <h3 className="font-['Outfit'] font-semibold text-sm text-[var(--text-primary)]">AI Social Caption Writer</h3>
             </div>
 
             <form onSubmit={handleGenerateCaption} className="space-y-3">
               <div>
-                <label className="block text-xs text-gray-300 mb-1">Post Topic / Idea</label>
+                <label className="block text-xs text-[var(--text-secondary)] mb-1">Post Topic / Idea</label>
                 <input
                   type="text"
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
                   placeholder="e.g. Launching my new coding portfolio website"
-                  className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-purple-500"
+                  className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-2 text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs text-gray-300 mb-1">Select Vibe Tone</label>
-                <div className="grid grid-cols-3 gap-2">
+                <label className="block text-xs text-[var(--text-secondary)] mb-1">Select Vibe Tone</label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {['energetic', 'chill', 'witty', 'reflective', 'professional', 'bold'].map((t) => (
                     <button
                       type="button"
                       key={t}
                       onClick={() => setVibeTone(t)}
-                      className={`py-1.5 rounded-lg text-xs font-medium capitalize transition-all ${
+                      className={`py-1.5 px-2 rounded-lg text-xs font-medium capitalize transition-all ${
                         vibeTone === t
-                          ? 'bg-purple-600 text-white font-semibold'
-                          : 'bg-gray-900 text-gray-400 border border-gray-800 hover:text-gray-200'
+                          ? 'btn-gradient text-white font-semibold shadow-md'
+                          : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-glass)] hover:text-[var(--text-primary)]'
                       }`}
                     >
                       {t}
@@ -335,7 +335,7 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
               <button
                 type="submit"
                 disabled={genLoading || (quota && quota.ai_remaining <= 0)}
-                className="w-full btn-gradient py-2.5 rounded-xl text-white font-semibold text-xs flex items-center justify-center space-x-2 disabled:opacity-50"
+                className="w-full btn-gradient py-2.5 rounded-xl text-white font-semibold text-xs flex items-center justify-center space-x-2 disabled:opacity-50 shadow-md"
               >
                 {genLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
                 <span>Generate Smart Post</span>
@@ -344,12 +344,12 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
 
             {/* Result Box & Direct Publish Button */}
             {generatedResult && (
-              <div className="p-3.5 rounded-xl bg-purple-950/40 border border-purple-500/30 space-y-3 text-xs">
-                <div className="flex items-center justify-between text-purple-300 font-semibold">
+              <div className="p-3.5 rounded-xl bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/30 space-y-3 text-xs">
+                <div className="flex items-center justify-between text-[var(--accent-primary)] font-semibold">
                   <span>Result Preview:</span>
-                  <span className="text-[10px] bg-purple-500/20 px-2 py-0.5 rounded-full">{generatedResult.vibe_tag}</span>
+                  <span className="text-[10px] bg-[var(--accent-primary)]/20 px-2 py-0.5 rounded-full">{generatedResult.vibe_tag}</span>
                 </div>
-                <p className="text-gray-200 whitespace-pre-line">{generatedResult.caption}</p>
+                <p className="text-[var(--text-primary)] whitespace-pre-line">{generatedResult.caption}</p>
                 <div className="text-sm">{generatedResult.emojis}</div>
 
                 <button
@@ -370,12 +370,11 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
             )}
           </div>
 
-
           {/* Content Moderation Tester */}
-          <div className="glass-panel rounded-2xl p-4 border border-gray-800 space-y-3">
+          <div className="glass-panel rounded-2xl p-4 border border-[var(--border-glass)] space-y-3">
             <div className="flex items-center space-x-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <h4 className="font-['Outfit'] font-semibold text-xs text-gray-200">Content Moderation Tester</h4>
+              <h4 className="font-['Outfit'] font-semibold text-xs text-[var(--text-primary)]">Content Moderation Tester</h4>
             </div>
             <div className="flex space-x-2">
               <input
@@ -383,11 +382,11 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
                 value={modText}
                 onChange={(e) => setModText(e.target.value)}
                 placeholder="Type text to safety test..."
-                className="flex-1 bg-gray-900 border border-gray-800 rounded-xl px-3 py-1.5 text-xs text-gray-200 focus:outline-none"
+                className="flex-1 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none"
               />
               <button
                 onClick={handleModerate}
-                className="px-3 py-1.5 rounded-xl bg-gray-800 text-gray-200 text-xs hover:bg-gray-700"
+                className="px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-[var(--text-primary)] text-xs hover:bg-[var(--scrollbar-thumb)] transition-colors"
               >
                 Check
               </button>
@@ -406,3 +405,4 @@ export default function AIStudio({ user, quota, refreshQuota, onOpenAuth, onPubl
     </div>
   );
 }
+

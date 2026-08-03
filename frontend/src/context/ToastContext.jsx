@@ -92,7 +92,7 @@ function ToastContainer({ toasts, onDismiss }) {
 
   return (
     <div
-      className="fixed top-5 right-5 z-[9999] flex flex-col gap-3 max-w-sm sm:max-w-md w-full px-4 sm:px-0 pointer-events-none"
+      className="fixed top-3 sm:top-5 left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:right-5 z-[9999] flex flex-col gap-2.5 max-w-[calc(100vw-2rem)] sm:max-w-md w-full pointer-events-none"
       aria-live="polite"
     >
       {toasts.map((t) => (

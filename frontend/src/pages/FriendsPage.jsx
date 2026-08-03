@@ -74,17 +74,17 @@ export default function FriendsPage({ user, onOpenAuth, onOpenMessenger }) {
 
   if (!user) {
     return (
-      <div className="glass-panel rounded-2xl p-8 text-center space-y-4 border border-gray-800">
-        <div className="inline-flex p-3 rounded-full bg-purple-500/10 text-purple-400">
+      <div className="glass-panel rounded-2xl p-8 text-center space-y-4 border border-[var(--border-glass)]">
+        <div className="inline-flex p-3 rounded-full bg-[var(--accent-primary)]/15 text-[var(--accent-primary)]">
           <Users className="w-8 h-8" />
         </div>
-        <h3 className="font-['Outfit'] font-bold text-gray-100 text-lg">Sign In to Find Friends</h3>
-        <p className="text-xs text-gray-400 max-w-sm mx-auto">
+        <h3 className="font-['Outfit'] font-bold text-[var(--text-primary)] text-lg">Sign In to Find Friends</h3>
+        <p className="text-xs text-[var(--text-muted)] max-w-sm mx-auto">
           Connect with creators, techies, and digital nomads across the Vibely network!
         </p>
         <button
           onClick={onOpenAuth}
-          className="btn-gradient px-5 py-2.5 rounded-xl text-white font-medium text-xs inline-flex items-center space-x-2"
+          className="btn-gradient px-5 py-2.5 rounded-xl text-white font-medium text-xs inline-flex items-center space-x-2 shadow-lg"
         >
           <UserIcon className="w-4 h-4" />
           <span>Sign In / Register</span>
@@ -102,53 +102,53 @@ export default function FriendsPage({ user, onOpenAuth, onOpenMessenger }) {
     <div className="space-y-6 pb-12">
       
       {/* Search Header Banner */}
-      <div className="glass-card rounded-2xl p-5 border border-purple-500/30 space-y-4">
+      <div className="glass-card rounded-2xl p-4 sm:p-5 border border-[var(--border-glass)] space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="p-3 rounded-2xl bg-purple-500/20 text-purple-300">
+            <div className="p-3 rounded-2xl bg-[var(--accent-primary)]/20 text-[var(--accent-primary)]">
               <Users className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="font-['Outfit'] font-extrabold text-xl text-gray-100">Discover Friends & Creators</h2>
-              <p className="text-xs text-purple-300">Search members, follow accounts, and start direct chats</p>
+              <h2 className="font-['Outfit'] font-extrabold text-lg sm:text-xl text-[var(--text-primary)]">Discover Friends & Creators</h2>
+              <p className="text-xs text-[var(--text-muted)]">Search members, follow accounts, and start direct chats</p>
             </div>
           </div>
         </div>
 
         <form onSubmit={handleSearchSubmit} className="flex gap-2">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-3" />
+            <Search className="w-4 h-4 text-[var(--text-muted)] absolute left-3.5 top-3" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, handle, or badge..."
-              className="w-full bg-gray-900 border border-gray-800 rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-gray-200 focus:outline-none focus:border-purple-500"
+              className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)]"
             />
           </div>
-          <button type="submit" className="btn-gradient px-4 py-2.5 rounded-xl text-white text-xs font-semibold">
+          <button type="submit" className="btn-gradient px-4 py-2.5 rounded-xl text-white text-xs font-semibold shadow-md">
             Search
           </button>
         </form>
 
         {/* Filter Toggle */}
-        <div className="flex items-center space-x-2 text-xs pt-1">
+        <div className="flex items-center space-x-2 text-xs pt-1 overflow-x-auto no-scrollbar">
           <button
             onClick={() => setFilter('suggestions')}
-            className={`px-3 py-1.5 rounded-xl font-medium transition-colors ${
+            className={`px-3 py-1.5 rounded-xl font-medium whitespace-nowrap transition-colors ${
               filter === 'suggestions'
-                ? 'bg-purple-500/20 border border-purple-500/40 text-purple-300'
-                : 'bg-gray-900/60 border border-gray-800 text-gray-400 hover:text-gray-200'
+                ? 'bg-[var(--accent-primary)]/20 border border-[var(--accent-primary)]/40 text-[var(--accent-primary)] font-semibold'
+                : 'bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             All Suggestions ({usersList.length})
           </button>
           <button
             onClick={() => setFilter('following')}
-            className={`px-3 py-1.5 rounded-xl font-medium transition-colors ${
+            className={`px-3 py-1.5 rounded-xl font-medium whitespace-nowrap transition-colors ${
               filter === 'following'
-                ? 'bg-purple-500/20 border border-purple-500/40 text-purple-300'
-                : 'bg-gray-900/60 border border-gray-800 text-gray-400 hover:text-gray-200'
+                ? 'bg-[var(--accent-primary)]/20 border border-[var(--accent-primary)]/40 text-[var(--accent-primary)] font-semibold'
+                : 'bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             My Friends / Following ({usersList.filter((u) => u.is_following).length})
@@ -158,7 +158,7 @@ export default function FriendsPage({ user, onOpenAuth, onOpenMessenger }) {
 
       {/* Users Grid */}
       {loading ? (
-        <div className="text-center py-12 text-xs text-gray-500">Searching community members...</div>
+        <div className="text-center py-12 text-xs text-[var(--text-muted)]">Searching community members...</div>
       ) : displayedUsers.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {displayedUsers.map((u) => {
@@ -166,45 +166,45 @@ export default function FriendsPage({ user, onOpenAuth, onOpenMessenger }) {
             return (
               <div
                 key={u.id}
-                className="glass-card rounded-2xl p-4 border border-gray-800 flex items-center justify-between hover:border-gray-700 transition-colors"
+                className="glass-card rounded-2xl p-4 border border-[var(--border-glass)] flex items-center justify-between transition-colors"
               >
                 <div className="flex items-center space-x-3 min-w-0 pr-2">
                   <div className="relative shrink-0">
                     <img
                       src={u.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${u.username}`}
                       alt={u.username}
-                      className="w-12 h-12 rounded-full border border-purple-500/30 object-cover"
+                      className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-[var(--border-glass)] object-cover"
                     />
-                    <Circle className={`w-3.5 h-3.5 absolute bottom-0 right-0 border-2 border-gray-950 rounded-full ${
-                      isUserOnline ? 'text-emerald-400 fill-emerald-400 animate-pulse' : 'text-gray-600 fill-gray-600'
+                    <Circle className={`w-3.5 h-3.5 absolute bottom-0 right-0 border-2 border-[var(--bg-primary)] rounded-full ${
+                      isUserOnline ? 'text-emerald-400 fill-emerald-400 animate-pulse' : 'text-[var(--text-muted)] fill-[var(--text-muted)]'
                     }`} />
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center space-x-1.5">
-                      <span className="font-semibold text-sm text-gray-100 truncate">{u.full_name || u.username}</span>
-                      <span className="px-2 py-0.2 text-[9px] font-bold rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 shrink-0">
+                      <span className="font-semibold text-xs sm:text-sm text-[var(--text-primary)] truncate">{u.full_name || u.username}</span>
+                      <span className="px-2 py-0.2 text-[9px] font-bold rounded-full bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30 shrink-0">
                         {u.vibe_badge || 'Creator'}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-400 truncate flex items-center gap-1.5">
+                    <p className="text-xs text-[var(--text-muted)] truncate flex items-center gap-1.5">
                       <span>@{u.username}</span>
-                      <span className="w-1 h-1 rounded-full bg-gray-600" />
-                      <span className={isUserOnline ? "text-emerald-400 font-medium" : "text-gray-500"}>
+                      <span className="w-1 h-1 rounded-full bg-[var(--text-muted)]" />
+                      <span className={isUserOnline ? "text-emerald-400 font-medium" : "text-[var(--text-muted)]"}>
                         {isUserOnline ? "Online" : "Offline"}
                       </span>
                     </p>
-                    <p className="text-[11px] text-gray-500 truncate pt-0.5">{u.bio || 'Vibing on Vibely ✨'}</p>
+                    <p className="text-[11px] text-[var(--text-secondary)] truncate pt-0.5">{u.bio || 'Vibing on Vibely ✨'}</p>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center space-x-2 shrink-0">
+                <div className="flex items-center space-x-1.5 shrink-0">
                   <button
                     onClick={() => handleToggleFollow(u.id)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center space-x-1 transition-all ${
+                    className={`px-3 py-1.5 min-h-[36px] rounded-xl text-xs font-semibold flex items-center space-x-1 transition-all ${
                       u.is_following
-                        ? 'bg-purple-500/20 border border-purple-500/40 text-purple-300'
-                        : 'bg-purple-600 hover:bg-purple-500 text-white shadow-md shadow-purple-500/20'
+                        ? 'bg-[var(--accent-primary)]/15 border border-[var(--accent-primary)]/40 text-[var(--accent-primary)]'
+                        : 'btn-gradient text-white shadow-md'
                     }`}
                   >
                     {u.is_following ? (
@@ -222,7 +222,7 @@ export default function FriendsPage({ user, onOpenAuth, onOpenMessenger }) {
 
                   <button
                     onClick={() => onOpenMessenger(u)}
-                    className="p-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-purple-300 hover:text-white transition-colors"
+                    className="p-2 min-h-[36px] min-w-[36px] rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--scrollbar-thumb)] border border-[var(--border-glass)] text-[var(--accent-primary)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center"
                     title="Send Message"
                   >
                     <MessageSquare className="w-4 h-4" />
@@ -233,13 +233,14 @@ export default function FriendsPage({ user, onOpenAuth, onOpenMessenger }) {
           })}
         </div>
       ) : (
-        <div className="glass-panel rounded-2xl p-8 text-center text-xs text-gray-500 border border-gray-800 space-y-2">
-          <Sparkles className="w-6 h-6 text-purple-400 mx-auto" />
-          <p className="font-medium text-gray-300">No users found matching your search</p>
-          <p className="text-gray-500">Try searching for another name or handle!</p>
+        <div className="glass-panel rounded-2xl p-8 text-center text-xs text-[var(--text-muted)] border border-[var(--border-glass)] space-y-2">
+          <Sparkles className="w-6 h-6 text-[var(--accent-primary)] mx-auto" />
+          <p className="font-medium text-[var(--text-primary)]">No users found matching your search</p>
+          <p className="text-[var(--text-muted)]">Try searching for another name or handle!</p>
         </div>
       )}
 
     </div>
   );
 }
+
