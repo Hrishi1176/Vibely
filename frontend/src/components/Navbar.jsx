@@ -5,7 +5,7 @@ import ThemeSelector from './ThemeSelector';
 export default function Navbar({ user, quota, onOpenCreate, onOpenAuth, onLogout, activeTab, setActiveTab, onOpenWhyVibely }) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[var(--border-glass)] bg-[var(--bg-primary)]/90 backdrop-blur-xl transition-colors duration-300">
-      <div className="max-w-6xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between overflow-x-auto no-scrollbar gap-2 sm:gap-4">
 
         {/* Brand Logo */}
         <div
@@ -30,7 +30,7 @@ export default function Navbar({ user, quota, onOpenCreate, onOpenAuth, onLogout
 
         {/* Center Quota Pill (Desktop & Tablet) */}
         {user && quota && (
-          <div className="hidden md:flex items-center space-x-4 bg-[var(--bg-secondary)] border border-[var(--border-glass)] rounded-full px-4 py-1.5 text-xs text-[var(--text-secondary)]">
+          <div className="hidden md:flex items-center space-x-4 bg-[var(--bg-secondary)] border border-[var(--border-glass)] rounded-full px-4 py-1.5 text-xs text-[var(--text-secondary)] shrink-0">
             <div className="flex items-center space-x-1.5">
               <Zap className="w-3.5 h-3.5 text-[var(--accent-primary)]" />
               <span>AI Credits: <strong className="text-[var(--accent-primary)]">{quota.ai_remaining}/{quota.ai_max}</strong></span>
@@ -45,7 +45,7 @@ export default function Navbar({ user, quota, onOpenCreate, onOpenAuth, onLogout
 
         {/* Mobile Quota Mini Pill (Mobile Only) */}
         {user && quota && (
-          <div className="md:hidden flex items-center space-x-1 text-[11px] font-bold bg-[var(--bg-secondary)] border border-[var(--border-glass)] px-2.5 py-1 rounded-full text-[var(--accent-primary)]">
+          <div className="md:hidden flex items-center space-x-1 text-[11px] font-bold bg-[var(--bg-secondary)] border border-[var(--border-glass)] px-2.5 py-1 rounded-full text-[var(--accent-primary)] shrink-0">
             <Zap className="w-3 h-3 text-[var(--accent-primary)]" />
             <span>{quota.ai_remaining}/{quota.ai_max}</span>
           </div>

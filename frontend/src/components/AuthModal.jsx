@@ -127,10 +127,13 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
 
     setLoading(true);
     try {
+      const sampleName = googleDemoName || googleDemoEmail.split('@')[0];
+      const googleAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(googleDemoEmail)}`;
       await authAPI.googleLogin({
         email: googleDemoEmail,
-        full_name: googleDemoName || googleDemoEmail.split('@')[0],
-        sub: `google_user_${googleDemoEmail.replace(/[^a-zA-Z0-9]/g, '_')}`
+        full_name: sampleName,
+        sub: `google_user_${googleDemoEmail.replace(/[^a-zA-Z0-9]/g, '_')}`,
+        avatar_url: googleAvatar
       });
       toast.success(`Google Sign-In successful! Welcome, ${googleDemoName || googleDemoEmail} 🎉`);
       const userRes = await authAPI.getMe();

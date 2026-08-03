@@ -60,7 +60,7 @@ export default function FriendsPage({ user, onOpenAuth, onOpenMessenger }) {
 
     try {
       const res = await usersAPI.toggleFollow(userId);
-      const isFollowingNow = res.data.is_following;
+      const isFollowingNow = res.data.following !== undefined ? res.data.following : res.data.is_following;
 
       setUsersList((prev) =>
         prev.map((u) => (u.id === userId ? { ...u, is_following: isFollowingNow } : u))

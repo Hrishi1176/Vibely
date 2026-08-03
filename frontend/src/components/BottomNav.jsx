@@ -13,7 +13,7 @@ export default function BottomNav({ activeTab, setActiveTab, onOpenCreate }) {
   ];
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--bg-primary)]/90 backdrop-blur-2xl border-t border-[var(--border-glass)] px-2 sm:px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] flex items-center justify-around shadow-2xl transition-colors duration-300">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur-2xl border-t border-[var(--border-glass)] px-2 sm:px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] flex items-center justify-around overflow-x-auto no-scrollbar shadow-2xl transition-colors duration-300">
       {tabsLeft.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
@@ -21,7 +21,7 @@ export default function BottomNav({ activeTab, setActiveTab, onOpenCreate }) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all min-h-[44px] ${
+            className={`flex flex-col items-center justify-center py-1 px-2 sm:px-2.5 rounded-xl transition-all min-h-[44px] shrink-0 ${
               isActive
                 ? 'text-[var(--accent-primary)] font-bold scale-105'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
@@ -49,7 +49,7 @@ export default function BottomNav({ activeTab, setActiveTab, onOpenCreate }) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] ${
+            className={`flex flex-col items-center justify-center py-1 px-2 sm:px-2.5 rounded-xl transition-all min-h-[44px] shrink-0 ${
               isActive
                 ? 'text-[var(--accent-primary)] font-bold scale-105'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
