@@ -379,7 +379,7 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
               className="px-5 py-2.5 rounded-2xl border border-[var(--border-accent)] text-[var(--text-primary)] font-semibold text-sm flex items-center space-x-2 hover:bg-[var(--bg-secondary)] transition-all"
             >
               <Play className="w-4 h-4 text-[var(--accent-primary)]" />
-              <span>Why We Beat Facebook</span>
+              <span>Why Choose Vibely</span>
             </button>
           </div>
         </div>
