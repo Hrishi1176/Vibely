@@ -5,7 +5,7 @@ let rawBaseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/ap
 if (!rawBaseUrl.endsWith('/api/v1')) {
   rawBaseUrl = `${rawBaseUrl}/api/v1`;
 }
-const API_BASE_URL = rawBaseUrl;
+export const API_BASE_URL = rawBaseUrl;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
