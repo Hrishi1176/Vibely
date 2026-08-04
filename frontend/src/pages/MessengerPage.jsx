@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageSquare, Send, Search, User as UserIcon, Sparkles, RefreshCw, Circle, CheckCheck, Smile, Image as ImageIcon, Mic, ArrowLeft, X, MoreHorizontal, Edit3, Trash2 } from 'lucide-react';
-import { messagesAPI, usersAPI } from '../services/api';
+import { messagesAPI, usersAPI, API_BASE_URL } from '../services/api';
 import { toast } from '../context/ToastContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import { compressAndReadFile } from '../utils/imageUploader';
@@ -33,6 +33,14 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+
+  const formatUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith('http')) return url;
+    const apiHost = API_BASE_URL.replace(/\/api\/v1\/?$/, '');
+    return `${apiHost}${url}`;
+  };
+
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -393,10 +401,10 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
   ];
 
   return (
-    <div className="min-h-[calc(100vh-12rem)] md:h-[78vh] glass-panel rounded-3xl border border-[var(--border-glass)] overflow-hidden flex flex-col md:flex-row shadow-sm relative transition-colors duration-300">
+    <div className="h-[calc(100vh-70px)] md:h-[85vh] bg-[var(--bg-primary)] md:border border-[var(--border-glass)] md:rounded-3xl overflow-hidden flex flex-col md:flex-row relative transition-colors duration-300">
       
       {/* Left Column: Conversations List */}
-      <div className={`w-full md:w-80 border-r border-[var(--border-glass)] flex flex-col bg-[var(--bg-tertiary)]/70 ${activeUser ? 'hidden md:flex' : 'flex'}`}>
+      <div className={`w-full md:w-88 border-r border-[var(--border-glass)] flex flex-col bg-[var(--bg-primary)] ${activeUser ? 'hidden md:flex' : 'flex'}`}>
         
         {/* Header & Search */}
         <div className="p-4 border-b border-[var(--border-glass)] space-y-3">
@@ -434,28 +442,28 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                 <button
                   key={c.user.id}
                   onClick={() => setActiveUser(c.user)}
-                  className={`w-full p-3.5 text-left flex items-center space-x-3 transition-all ${
-                    isSelected ? 'bg-[var(--accent-primary)]/15 border-l-4 border-[var(--accent-primary)]' : 'hover:bg-[var(--bg-secondary)]/50'
+                  className={`w-full px-4 py-3 text-left flex items-center space-x-3 transition-colors ${
+                    isSelected ? 'bg-[var(--bg-secondary)]' : 'hover:bg-[var(--bg-secondary)]/50'
                   }`}
                 >
                   <div className="relative shrink-0">
                     <img
                       src={c.user.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${c.user.username}`}
                       alt={c.user.username}
-                      className="w-10 h-10 rounded-full border border-[var(--border-glass)] object-cover"
+                      className="w-12 h-12 rounded-full object-cover"
                     />
-                    <Circle className={`w-3 h-3 absolute bottom-0 right-0 border-2 border-[var(--bg-primary)] rounded-full ${
-                      isUserOnline ? 'text-emerald-400 fill-emerald-400' : 'text-[var(--text-muted)] fill-[var(--text-muted)]'
+                    <Circle className={`w-3.5 h-3.5 absolute bottom-0 right-0 border-2 border-[var(--bg-primary)] rounded-full ${
+                      isUserOnline ? 'text-emerald-500 fill-emerald-500' : 'text-[var(--text-muted)] fill-[var(--text-muted)]'
                     }`} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <span className="font-semibold text-xs text-[var(--text-primary)] truncate">{c.user.full_name || c.user.username}</span>
-                      <span className="text-[10px] text-[var(--text-muted)] shrink-0">
+                      <span className="font-semibold text-[15px] text-[var(--text-primary)] truncate">{c.user.full_name || c.user.username}</span>
+                      <span className="text-[11px] text-[var(--text-muted)] shrink-0 font-medium">
                         {new Date(c.last_message_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}
                       </span>
                     </div>
-                    <p className="text-[11px] text-[var(--text-secondary)] truncate pt-0.5">
+                    <p className={`text-[13px] truncate pt-0.5 ${!c.is_last_from_me && c.last_message !== 'Start a conversation ✨' ? 'text-[var(--text-primary)] font-medium' : 'text-[var(--text-muted)]'}`}>
                       {c.is_last_from_me ? 'You: ' : ''}{c.last_message}
                     </p>
                   </div>
@@ -474,24 +482,24 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
       </div>
 
       {/* Right Column: Chat Window Viewport */}
-      <div className={`flex-1 flex flex-col bg-[var(--bg-secondary)]/40 ${!activeUser ? 'hidden md:flex' : 'flex'}`}>
+      <div className={`flex-1 flex flex-col bg-[var(--bg-secondary)]/20 ${!activeUser ? 'hidden md:flex' : 'flex'}`}>
         {activeUser ? (
           <>
             {/* Active Recipient Top Header */}
-            <div className="p-3.5 px-4 border-b border-[var(--border-glass)] flex items-center justify-between bg-[var(--bg-secondary)]/80 backdrop-blur-md">
+            <div className="px-4 py-3 border-b border-[var(--border-glass)] flex items-center justify-between bg-[var(--bg-primary)]/80 backdrop-blur-md z-10">
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => setActiveUser(null)}
-                  className="md:hidden p-2 min-h-[38px] min-w-[38px] rounded-xl bg-[var(--bg-tertiary)] text-[var(--accent-primary)] hover:text-[var(--text-primary)] border border-[var(--border-glass)] transition-colors flex items-center justify-center"
+                  className="md:hidden p-2 -ml-2 text-[var(--accent-primary)] hover:bg-[var(--bg-secondary)] rounded-full transition-colors flex items-center justify-center"
                   title="Back to Conversations"
                 >
-                  <ArrowLeft className="w-4 h-4" />
+                  <ArrowLeft className="w-5 h-5" />
                 </button>
-                <div className="relative">
+                <div className="relative cursor-pointer">
                   <img
                     src={activeUser.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${activeUser.username}`}
                     alt={activeUser.username}
-                    className="w-10 h-10 rounded-full border-2 border-[var(--border-glass)] object-cover"
+                    className="w-10 h-10 rounded-full object-cover"
                   />
                   <Circle className={`w-3 h-3 absolute bottom-0 right-0 border-2 border-[var(--bg-primary)] rounded-full ${
                     (onlineUsers[activeUser.id] ?? activeUser.is_online)
@@ -500,16 +508,16 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                   }`} />
                 </div>
                 <div>
-                  <div className="flex items-center space-x-2">
-                    <h3 className="font-['Outfit'] font-bold text-sm text-[var(--text-primary)]">{activeUser.full_name || activeUser.username}</h3>
+                  <div className="flex items-center space-x-1.5">
+                    <h3 className="font-['Outfit'] font-bold text-[15px] text-[var(--text-primary)]">{activeUser.full_name || activeUser.username}</h3>
                     <span className="px-2 py-0.2 text-[9px] font-bold rounded-full bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30">
                       {activeUser.vibe_badge || 'Creator'}
                     </span>
                   </div>
-                  <p className="text-[10px] text-[var(--text-muted)] flex items-center gap-1.5">
+                  <p className="text-[12px] text-[var(--text-muted)] flex items-center gap-1">
                     <span>@{activeUser.username}</span>
                     <span>·</span>
-                    <span className={(onlineUsers[activeUser.id] ?? activeUser.is_online) ? 'text-emerald-400 font-medium' : 'text-[var(--text-muted)]'}>
+                    <span className={(onlineUsers[activeUser.id] ?? activeUser.is_online) ? 'text-emerald-500 font-medium' : 'text-[var(--text-muted)]'}>
                       {(onlineUsers[activeUser.id] ?? activeUser.is_online) ? 'Online' : `Last seen ${formatLastSeen(activeUser.last_seen)}`}
                     </span>
                   </p>
@@ -573,25 +581,34 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
 
                         {/* Message Bubble */}
                         <div
-                          className={`max-w-[85%] sm:max-w-[70%] p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed relative ${
+                          className={`max-w-[85%] sm:max-w-[75%] px-3.5 py-2 text-[15px] leading-relaxed relative flex flex-col ${
                             isMine
-                              ? 'btn-gradient text-white rounded-br-none shadow-sm'
-                              : 'bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-[var(--text-primary)] rounded-bl-none shadow-sm'
+                              ? 'bg-[var(--accent-primary)] text-white rounded-[20px] rounded-br-sm shadow-sm'
+                              : 'bg-[var(--bg-tertiary)] border border-[var(--border-glass)] text-[var(--text-primary)] rounded-[20px] rounded-bl-sm shadow-sm'
                           }`}
                         >
                           {(m.image_url || m.file_url) && (
-                            <div className="mb-2 rounded-xl overflow-hidden border border-white/10">
+                            <div className="mb-2 rounded-xl overflow-hidden mt-1">
                               {m.file_url && (/\.webm$|\.wav$|\.ogg$|\.mp3$/i).test(m.file_url) ? (
-                                <audio controls src={m.file_url} className="w-full" />
+                                <audio controls src={formatUrl(m.file_url)} className="w-full h-10 custom-audio" />
                               ) : m.image_url ? (
-                                <img src={m.image_url} alt="Shared attachment" className="max-h-52 w-full object-cover" />
+                                <img src={m.image_url} alt="Shared attachment" className="max-h-64 w-full object-cover rounded-lg" />
                               ) : (
-                                <a href={m.file_url} className="text-xs text-[var(--accent-primary)] underline">Download attachment</a>
+                                <a href={formatUrl(m.file_url)} className="text-[13px] font-semibold underline" target="_blank" rel="noreferrer">Download attachment</a>
                               )}
                             </div>
                           )}
 
                           <p className="whitespace-pre-line break-words">{formatMessageContent(m)}</p>
+
+                          <div className={`flex items-center justify-end gap-1 text-[10px] mt-1 -mb-1 ${isMine ? 'text-white/80' : 'text-[var(--text-muted)]'}`}>
+                            <span>{new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                            {m.is_edited && !m.deleted_by_sender && !m.deleted_by_receiver && (
+                              <span className="italic">edited</span>
+                            )}
+                            {isMine && <CheckCheck className="w-3.5 h-3.5 text-white/90" />}
+                          </div>
+
 
                           {/* Reaction badge */}
                           {activeReaction && (
@@ -615,14 +632,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                         </div>
                       </div>
 
-                      {/* Timestamp & Read Tick */}
-                      <div className="flex items-center gap-2 text-[9px] text-[var(--text-muted)] mt-1 px-1">
-                        <span>{new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                        {m.is_edited && !m.deleted_by_sender && !m.deleted_by_receiver && (
-                          <span className="text-[9px] text-[var(--accent-primary)] italic">edited</span>
-                        )}
-                        {isMine && <CheckCheck className="w-3 h-3 text-emerald-400" />}
-                      </div>
+
 
                       {editingMessageId === m.id && (
                         <div className="mt-2 flex flex-col gap-2 w-full max-w-sm">
@@ -680,14 +690,14 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
             </div>
 
             {/* Message Input Bar */}
-            <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="p-2.5 sm:p-3 border-t border-[var(--border-glass)] bg-[var(--bg-secondary)]/80 flex items-center space-x-2">
+            <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="p-3 bg-[var(--bg-primary)] flex items-end space-x-2 z-10 shadow-[0_-4px_10px_rgba(0,0,0,0.02)]">
               <button
                 type="button"
                 onClick={handleImageButtonClick}
-                className="p-2 min-h-[38px] min-w-[38px] text-[var(--text-muted)] hover:text-[var(--accent-primary)] hover:bg-[var(--bg-primary)] rounded-xl transition-colors flex items-center justify-center"
+                className="p-2.5 text-[var(--accent-primary)] hover:bg-[var(--bg-secondary)] rounded-full transition-colors mb-0.5 shrink-0"
                 title="Send Image"
               >
-                <ImageIcon className="w-4 h-4" />
+                <ImageIcon className="w-6 h-6" />
               </button>
 
               <input
@@ -698,30 +708,34 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                 onChange={handleImageFileChange}
               />
 
-              <button
-                type="button"
-                onClick={handleToggleRecording}
-                className={`p-2 min-h-[38px] min-w-[38px] rounded-xl transition-colors flex items-center justify-center ${isRecording ? 'bg-red-600 text-white' : 'text-[var(--text-muted)] hover:text-[var(--accent-primary)] hover:bg-[var(--bg-primary)]'}`}
-                title={isRecording ? 'Stop recording and send' : 'Record Voice Note'}
-              >
-                <Mic className="w-4 h-4" />
-              </button>
-
-              <input
-                type="text"
-                value={newMessage}
-                onChange={handleInputChange}
-                placeholder={`Message @${activeUser.username}...`}
-                className="flex-1 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl px-3.5 py-2 text-xs sm:text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors"
-              />
-
-              <button
-                type="submit"
-                disabled={sending || (!newMessage.trim() && !imagePreview)}
-                className="btn-gradient p-2.5 min-h-[38px] min-w-[38px] rounded-xl text-white disabled:opacity-50 transition-opacity shrink-0 shadow-sm flex items-center justify-center"
-              >
-                {sending ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-              </button>
+              <div className="flex-1 bg-[var(--bg-secondary)] border border-[var(--border-glass)] rounded-[24px] flex items-center pr-1.5 pl-4 min-h-[44px]">
+                <input
+                  type="text"
+                  value={newMessage}
+                  onChange={handleInputChange}
+                  placeholder="Message..."
+                  className="flex-1 bg-transparent py-2.5 text-[15px] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none"
+                />
+                
+                {newMessage.trim() || imagePreview ? (
+                  <button
+                    type="submit"
+                    disabled={sending}
+                    className="p-1.5 ml-1 bg-[var(--accent-primary)] text-white rounded-full disabled:opacity-50 transition-transform hover:scale-105 shrink-0 flex items-center justify-center w-8 h-8"
+                  >
+                    {sending ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4 -ml-0.5" />}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleToggleRecording}
+                    className={`p-1.5 ml-1 rounded-full transition-colors shrink-0 flex items-center justify-center w-8 h-8 ${isRecording ? 'bg-red-500 text-white animate-pulse' : 'text-[var(--accent-primary)] hover:bg-[var(--bg-tertiary)]'}`}
+                    title={isRecording ? 'Stop recording and send' : 'Record Voice Note'}
+                  >
+                    <Mic className="w-5 h-5" />
+                  </button>
+                )}
+              </div>
             </form>
 
             {isRecording && (
