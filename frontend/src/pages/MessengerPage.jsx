@@ -6,7 +6,7 @@ import { useWebSocket } from '../context/WebSocketContext';
 import { compressAndReadFile } from '../utils/imageUploader';
 
 export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
-  const { onlineUsers, typingMap, incomingMessage, sendWebSocketMessage, sendTypingStatus } = useWebSocket();
+  const { onlineUsers, typingMap, incomingMessage, sendWebSocketMessage, sendTypingStatus, sendWebSocketAudio } = useWebSocket();
 
   const [conversations, setConversations] = useState([]);
   const [activeUser, setActiveUser] = useState(targetFriend || null);
