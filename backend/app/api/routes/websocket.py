@@ -9,7 +9,7 @@ from app.services.websocket_service import WebsocketService
 
 router = APIRouter(tags=["WebSockets"])
 
-@router.websocket("/ws")
+@router.websocket("/ws/chat")
 async def websocket_endpoint(
     websocket: WebSocket, 
     token: str = None, 

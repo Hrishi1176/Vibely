@@ -8,7 +8,7 @@ from app.services.quota_service import QuotaService
 
 router = APIRouter(prefix="/quotas", tags=["User Quotas"])
 
-@router.get("/status", response_model=QuotaStatusResponse)
+@router.get("/my-quota", response_model=QuotaStatusResponse)
 def get_status(
     db: Session = Depends(get_db), 
     current_user: User = Depends(get_current_user),
