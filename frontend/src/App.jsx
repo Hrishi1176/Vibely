@@ -109,7 +109,7 @@ export default function App() {
       </div>
 
       {/* Main App Layout */}
-      <div className="max-w-6xl w-full mx-auto px-3 sm:px-4 py-4 sm:py-6 flex flex-col lg:flex-row gap-4 lg:gap-6 flex-1 pb-28 lg:pb-0">
+      <div className="max-w-6xl w-full mx-auto px-3 sm:px-4 py-3 sm:py-6 flex flex-col lg:flex-row gap-4 lg:gap-6 flex-1 pb-20 sm:pb-24 lg:pb-0">
         
         {/* Left Sidebar (Desktop) */}
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} quota={quota} />

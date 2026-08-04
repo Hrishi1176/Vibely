@@ -128,7 +128,7 @@ export default function PostCard({ post, currentUser, onPostUpdated }) {
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="glass-card rounded-2xl p-4 sm:p-5 mb-4 border border-[var(--border-glass)] relative overflow-hidden group"
+      className="glass-card rounded-2xl p-3.5 sm:p-5 mb-4 border border-[var(--border-glass)] relative overflow-hidden group"
       style={{
         transform: `perspective(900px) rotateX(${-tilt.y}deg) rotateY(${tilt.x}deg)`,
         transition: 'transform 0.12s ease-out, box-shadow 0.3s ease',
@@ -226,7 +226,7 @@ export default function PostCard({ post, currentUser, onPostUpdated }) {
         {/* Like */}
         <button
           onClick={handleLike}
-          className={`relative flex items-center space-x-1.5 px-3 py-1.5 rounded-xl transition-all active:scale-90 group/like ${
+          className={`relative flex items-center space-x-1.5 px-3 min-h-[44px] rounded-xl transition-all active:scale-90 group/like ${
             liked ? 'text-pink-500' : 'hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'
           }`}
         >
@@ -245,7 +245,7 @@ export default function PostCard({ post, currentUser, onPostUpdated }) {
         {/* Comment */}
         <button
           onClick={handleToggleComments}
-          className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-all group/comment"
+          className="flex items-center space-x-1.5 px-3 min-h-[44px] rounded-xl hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-all group/comment"
         >
           <MessageCircle className="w-4 h-4 icon-bounce" />
           <span>{commentsCount}</span>
@@ -254,7 +254,7 @@ export default function PostCard({ post, currentUser, onPostUpdated }) {
         {/* Share */}
         <button
           onClick={handleShare}
-          className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-all group/share"
+          className="flex items-center space-x-1.5 px-3 min-h-[44px] rounded-xl hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] transition-all group/share"
         >
           {copied
             ? <Check  className="w-4 h-4 text-emerald-400" />
@@ -266,7 +266,7 @@ export default function PostCard({ post, currentUser, onPostUpdated }) {
         {/* Save */}
         <button
           onClick={() => { setSaved(!saved); if (!saved) toast.success('Post saved! 🔖'); }}
-          className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl transition-all active:scale-90 ${
+          className={`flex items-center space-x-1.5 px-3 min-h-[44px] rounded-xl transition-all active:scale-90 ${
             saved ? 'text-amber-400' : 'hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'
           }`}
         >

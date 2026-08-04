@@ -71,6 +71,9 @@ def _safe_migrate_sqlite():
             if "deleted_by_receiver" not in msg_cols:
                 cur.execute("ALTER TABLE direct_messages ADD COLUMN deleted_by_receiver BOOLEAN DEFAULT 0")
                 migrations.append("direct_messages.deleted_by_receiver")
+            if "file_url" not in msg_cols:
+                cur.execute("ALTER TABLE direct_messages ADD COLUMN file_url TEXT")
+                migrations.append("direct_messages.file_url")
 
         if migrations:
             con.commit()

@@ -92,7 +92,7 @@ function StoryCircle({ user, isCreate, onClick, index }) {
   return (
     <button
       onClick={onClick}
-      className="flex flex-col items-center space-y-1.5 shrink-0 group animate-slide-up"
+      className="flex flex-col items-center space-y-1.5 shrink-0 snap-start group animate-slide-up"
       style={{ animationDelay: `${index * 55}ms` }}
     >
       <div className="relative">
@@ -330,7 +330,7 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
         <div className="absolute -bottom-12 -right-12 w-52 h-52 rounded-full opacity-12 blur-3xl pointer-events-none"
           style={{ background: 'var(--accent-secondary)' }} />
 
-        <div className="relative z-10 p-6 sm:p-8">
+        <div className="relative z-10 p-4 sm:p-8">
           {/* Hero benefits grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
             {HERO_FEATURES.map((feature) => {
@@ -366,7 +366,7 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
           </div>
 
           {/* Live Platform Stats — real data from /posts/stats */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
             {statsLoading ? (
               [1, 2, 3].map((n) => (
                 <div key={n} className="flex flex-col items-center space-y-2 animate-slide-up" style={{ animationDelay: `${n * 100}ms` }}>
@@ -413,7 +413,7 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
           </h2>
           {storyLoading && <Loader2 className="w-3.5 h-3.5 text-[var(--text-muted)] animate-spin" />}
         </div>
-        <div className="flex items-start space-x-4 overflow-x-auto pb-1 no-scrollbar">
+        <div className="flex items-start space-x-4 overflow-x-auto pb-1 no-scrollbar snap-x snap-mandatory">
           {/* Create Vibe (always first) */}
           <StoryCircle isCreate onClick={user ? onOpenCreate : onOpenAuth} index={0} />
 
@@ -492,14 +492,14 @@ export default function HomeFeed({ user, refreshKey, onOpenCreate, onOpenAuth, o
 
       {/* ── FILTER TABS — dynamic from real post vibe_tags ── */}
       <div className="flex items-center justify-between px-1 animate-slide-up stagger-4">
-        <div className="relative flex items-center space-x-1.5 overflow-x-auto pb-1 no-scrollbar">
+        <div className="relative flex items-center space-x-1.5 overflow-x-auto pb-1 no-scrollbar snap-x snap-mandatory">
           {dynamicFilters.map((f) => {
             const isActive = activeFilter === f.id;
             return (
               <button
                 key={f.id}
                 onClick={() => setActiveFilter(f.id)}
-                className={`relative px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center space-x-1.5 ${
+                className={`snap-start relative px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center space-x-1.5 ${
                   isActive
                     ? 'text-white bg-[var(--accent-primary)] shadow-sm'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] bg-[var(--bg-secondary)] border border-[var(--border-glass)]'

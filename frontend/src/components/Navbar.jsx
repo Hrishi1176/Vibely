@@ -5,7 +5,7 @@ import ThemeSelector from './ThemeSelector';
 export default function Navbar({ user, quota, onOpenCreate, onOpenAuth, onLogout, activeTab, setActiveTab, onOpenWhyVibely }) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[var(--border-glass)] bg-[var(--bg-primary)]/90 backdrop-blur-xl transition-colors duration-300">
-      <div className="max-w-6xl mx-auto w-full px-3 sm:px-4 h-16 flex flex-wrap items-center justify-between gap-3 overflow-x-auto md:overflow-visible no-scrollbar">
+      <div className="max-w-6xl mx-auto w-full px-3 sm:px-4 h-14 sm:h-16 flex flex-nowrap items-center justify-between gap-2 sm:gap-3 overflow-x-auto md:overflow-visible no-scrollbar">
 
         {/* Brand Logo */}
         <div
@@ -52,7 +52,7 @@ export default function Navbar({ user, quota, onOpenCreate, onOpenAuth, onLogout
         )}
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 shrink-0">
+        <div className="flex flex-nowrap items-center gap-1.5 sm:gap-3 shrink-0">
           <ThemeSelector />
 
           <button
