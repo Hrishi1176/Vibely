@@ -5,8 +5,80 @@ import { toast } from '../context/ToastContext';
 import { useWebSocket } from '../context/WebSocketContext';
 import { compressAndReadFile } from '../utils/imageUploader';
 
+
+const VoiceNotePlayer = ({ src, isMine }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    const updateProgress = () => setProgress((audio.currentTime / audio.duration) * 100);
+    const handleEnded = () => setIsPlaying(false);
+    const handleLoadedMetadata = () => {
+      if (audio.duration !== Infinity) {
+        setDuration(audio.duration);
+      }
+    };
+
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+
+    return () => {
+      audio.removeEventListener('timeupdate', updateProgress);
+      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+    };
+  }, []);
+
+  const togglePlay = () => {
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const formatTime = (secs) => {
+    if (!secs || isNaN(secs) || !isFinite(secs)) return '0:00';
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  };
+
+  return (
+    <div className={`flex items-center space-x-3 w-48 sm:w-56 p-1.5 rounded-full ${isMine ? 'bg-white/10' : 'bg-[var(--bg-primary)] border border-[var(--border-glass)] shadow-sm'}`}>
+      <button 
+        onClick={togglePlay} 
+        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isMine ? 'bg-white text-[var(--accent-primary)]' : 'bg-[var(--accent-primary)] text-white'}`}
+      >
+        {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 translate-x-[1px]" />}
+      </button>
+      
+      <div className="flex-1 flex flex-col justify-center pr-2">
+        <div className={`h-1.5 rounded-full overflow-hidden w-full ${isMine ? 'bg-white/30' : 'bg-[var(--border-glass)]'}`}>
+          <div 
+            className={`h-full rounded-full transition-all duration-75 ${isMine ? 'bg-white' : 'bg-[var(--accent-primary)]'}`} 
+            style={{ width: `${progress || 0}%` }} 
+          />
+        </div>
+        <div className={`text-[10px] mt-1 font-medium ${isMine ? 'text-white/80' : 'text-[var(--text-muted)]'}`}>
+          {formatTime(audioRef.current?.currentTime || 0)}
+        </div>
+      </div>
+      
+      <audio ref={audioRef} src={src} preload="metadata" />
+    </div>
+  );
+};
+
 export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
-  const { onlineUsers, typingMap, incomingMessage, sendWebSocketMessage, sendTypingStatus, sendWebSocketAudio } = useWebSocket();
+  const { onlineUsers, typingMap, incomingMessage, sendWebSocketMessage, sendTypingStatus } = useWebSocket();
 
   const [conversations, setConversations] = useState([]);
   const [activeUser, setActiveUser] = useState(targetFriend || null);
@@ -590,7 +662,7 @@ export default function MessengerPage({ user, targetFriend, onOpenAuth }) {
                           {(m.image_url || m.file_url) && (
                             <div className="mb-2 rounded-xl overflow-hidden mt-1">
                               {m.file_url && (/\.webm$|\.wav$|\.ogg$|\.mp3$/i).test(m.file_url) ? (
-                                <audio controls src={formatUrl(m.file_url)} className="w-full h-10 custom-audio" />
+                                <VoiceNotePlayer src={formatUrl(m.file_url)} isMine={isMine} />
                               ) : m.image_url ? (
                                 <img src={m.image_url} alt="Shared attachment" className="max-h-64 w-full object-cover rounded-lg" />
                               ) : (
