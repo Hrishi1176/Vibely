@@ -23,69 +23,11 @@ logger = logging.getLogger("vibely.main")
 # Create all tables (idempotent — skips existing tables)
 Base.metadata.create_all(bind=engine)
 
-# ── Safe column migration for SQLite ──────────────────────────────────────────
-# Handles the case where a column was added to a model after the DB was created.
-# (create_all only creates new tables, never ALTERs existing ones on SQLite.)
-def _safe_migrate_sqlite():
-    db_url = settings.DATABASE_URL
-    if not db_url.startswith("sqlite"):
-        return  # Postgres/Supabase: use Alembic instead
-
-    db_path = db_url.replace("sqlite:///", "").replace("./", "")
-    try:
-        con = sqlite3.connect(db_path)
-        cur = con.cursor()
-
-        cur.execute("PRAGMA table_info(users)")
-        cols = {row[1] for row in cur.fetchall()}
-
-        migrations = []
-        if "is_online" not in cols:
-            cur.execute("ALTER TABLE users ADD COLUMN is_online BOOLEAN DEFAULT 0")
-            migrations.append("users.is_online")
-
-        if "last_seen" not in cols:
-            cur.execute("ALTER TABLE users ADD COLUMN last_seen DATETIME")
-            from datetime import datetime
-            cur.execute(
-                "UPDATE users SET last_seen = ? WHERE last_seen IS NULL",
-                (datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),)
-            )
-            migrations.append("users.last_seen")
-
-        if "image_url" not in cols:
-            cur.execute("PRAGMA table_info(direct_messages)")
-            msg_cols = {row[1] for row in cur.fetchall()}
-            if "image_url" not in msg_cols:
-                cur.execute("ALTER TABLE direct_messages ADD COLUMN image_url TEXT")
-                migrations.append("direct_messages.image_url")
-            if "is_edited" not in msg_cols:
-                cur.execute("ALTER TABLE direct_messages ADD COLUMN is_edited BOOLEAN DEFAULT 0")
-                migrations.append("direct_messages.is_edited")
-            if "edited_at" not in msg_cols:
-                cur.execute("ALTER TABLE direct_messages ADD COLUMN edited_at DATETIME")
-                migrations.append("direct_messages.edited_at")
-            if "deleted_by_sender" not in msg_cols:
-                cur.execute("ALTER TABLE direct_messages ADD COLUMN deleted_by_sender BOOLEAN DEFAULT 0")
-                migrations.append("direct_messages.deleted_by_sender")
-            if "deleted_by_receiver" not in msg_cols:
-                cur.execute("ALTER TABLE direct_messages ADD COLUMN deleted_by_receiver BOOLEAN DEFAULT 0")
-                migrations.append("direct_messages.deleted_by_receiver")
-            if "file_url" not in msg_cols:
-                cur.execute("ALTER TABLE direct_messages ADD COLUMN file_url TEXT")
-                migrations.append("direct_messages.file_url")
-
-        if migrations:
-            con.commit()
-            logger.info("Auto-migrated columns: %s", ", ".join(migrations))
-        else:
-            logger.info("Schema up-to-date — no migrations needed.")
-
-        con.close()
-    except Exception as exc:
-        logger.warning("Safe migration skipped: %s", exc)
-
-_safe_migrate_sqlite()
+# Run universal migrations (supports SQLite and Postgres)
+try:
+    run_migrations()
+except Exception as e:
+    logger.error(f"Migration error: {e}")
 
 
 
