@@ -1,14 +1,14 @@
 import json
 import datetime
-from typing import Dict, List, Set
+from typing import Dict, List
 from fastapi import WebSocket
 from sqlalchemy.orm import Session
-from app.models.models import User
+from app.repositories.user_repository import UserRepository
 
-class ConnectionManager:
-    def __init__(self):
-        # Maps user_id -> List of active WebSockets
+class WebsocketService:
+    def __init__(self, user_repo: UserRepository):
         self.active_connections: Dict[int, List[WebSocket]] = {}
+        self.user_repo = user_repo
 
     async def connect(self, websocket: WebSocket, user_id: int, db: Session):
         await websocket.accept()
@@ -16,9 +16,8 @@ class ConnectionManager:
             self.active_connections[user_id] = []
         self.active_connections[user_id].append(websocket)
 
-        # Update User Presence in DB to ONLINE
         try:
-            user = db.query(User).filter(User.id == user_id).first()
+            user = self.user_repo.get(db, user_id)
             if user:
                 user.is_online = True
                 user.last_seen = datetime.datetime.utcnow()
@@ -26,7 +25,6 @@ class ConnectionManager:
         except Exception as e:
             print(f"Error updating user online presence: {e}")
 
-        # Broadcast Presence Update to all connected clients
         await self.broadcast({
             "type": "user_presence",
             "user_id": user_id,
@@ -39,11 +37,10 @@ class ConnectionManager:
             if websocket in self.active_connections[user_id]:
                 self.active_connections[user_id].remove(websocket)
             
-            # If user has closed all tabs/connections, mark as OFFLINE
             if not self.active_connections[user_id]:
                 del self.active_connections[user_id]
                 try:
-                    user = db.query(User).filter(User.id == user_id).first()
+                    user = self.user_repo.get(db, user_id)
                     if user:
                         user.is_online = False
                         user.last_seen = datetime.datetime.utcnow()
@@ -51,7 +48,6 @@ class ConnectionManager:
                 except Exception as e:
                     print(f"Error updating user offline presence: {e}")
 
-                # Broadcast Presence Update to all connected clients
                 await self.broadcast({
                     "type": "user_presence",
                     "user_id": user_id,
@@ -60,7 +56,6 @@ class ConnectionManager:
                 })
 
     async def send_personal_message(self, message: dict, user_id: int):
-        """Sends a JSON message to all active sockets of a specific user"""
         if user_id in self.active_connections:
             dead_sockets = []
             for connection in self.active_connections[user_id]:
@@ -73,7 +68,6 @@ class ConnectionManager:
                 self.active_connections[user_id].remove(dead)
 
     async def broadcast(self, message: dict):
-        """Broadcasts a JSON message to ALL active user connections"""
         payload = json.dumps(message)
         for user_id, connections in list(self.active_connections.items()):
             dead_sockets = []
@@ -85,4 +79,6 @@ class ConnectionManager:
             for dead in dead_sockets:
                 connections.remove(dead)
 
-manager = ConnectionManager()
+# Singleton instance
+from app.repositories.user_repository import UserRepository
+websocket_service_instance = WebsocketService(UserRepository())

@@ -5,19 +5,16 @@ from app.core.config import settings
 
 logger = logging.getLogger("vibely.ai")
 
-class GroqAIService:
-    @classmethod
-    def get_client(cls):
+class AiService:
+    def get_client(self):
         api_key = settings.GROQ_API_KEY or os.getenv("GROQ_API_KEY") or os.environ.get("GROQ_API_KEY")
         if api_key and api_key.strip():
             return Groq(api_key=api_key.strip())
         return None
 
-    @classmethod
-    def generate_caption(cls, prompt: str, vibe: str = "energetic") -> dict:
-        client = cls.get_client()
+    def generate_caption(self, prompt: str, vibe: str = "energetic") -> dict:
+        client = self.get_client()
         if not client:
-            # Fallback smart generator if GROQ_API_KEY isn't set yet
             return {
                 "caption": f"✨ {prompt} - living life with maximum {vibe} vibes!",
                 "vibe_tag": f"#{vibe.title()}Vibes",
@@ -36,7 +33,6 @@ class GroqAIService:
                 max_tokens=250,
             )
             content = response.choices[0].message.content
-            # Basic parse or fallback
             return {
                 "caption": content,
                 "vibe_tag": f"#{vibe.title()}Vibes",
@@ -50,16 +46,14 @@ class GroqAIService:
                 "emojis": "🌟💫"
             }
 
-    @classmethod
-    def moderate_content(cls, text: str) -> dict:
-        # Offline fast keyword moderation check
+    def moderate_content(self, text: str) -> dict:
         banned_words = ["hate", "abuse", "scam", "illegal", "exploit"]
         lowered = text.lower()
         for word in banned_words:
             if word in lowered:
                 return {"is_safe": False, "reason": f"Content contains restricted word: '{word}'"}
         
-        client = cls.get_client()
+        client = self.get_client()
         if client:
             try:
                 response = client.chat.completions.create(
@@ -79,9 +73,8 @@ class GroqAIService:
 
         return {"is_safe": True, "reason": "Content is safe and clear."}
 
-    @classmethod
-    def chat_assistant(cls, message: str) -> str:
-        client = cls.get_client()
+    def chat_assistant(self, message: str) -> str:
+        client = self.get_client()
         if not client:
             return settings.AI_FALLBACK_TEMPLATE.format(message=message)
         
@@ -100,12 +93,10 @@ class GroqAIService:
         except Exception as e:
             return f"VibeAI is taking a quick breather: {str(e)}"
 
-    @classmethod
-    def generate_image(cls, prompt: str, width: int = 1024, height: int = 1024) -> str:
+    def generate_image(self, prompt: str, width: int = 1024, height: int = 1024) -> str:
         import random
         import urllib.parse
         seed = random.randint(1000, 999999)
         encoded_prompt = urllib.parse.quote(prompt.strip())
         image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&seed={seed}&nologo=true"
         return image_url
-
