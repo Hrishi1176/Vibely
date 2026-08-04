@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, Send, Search, User as UserIcon, Sparkles, RefreshCw, Circle, CheckCheck, Smile, Image as ImageIcon, Mic, ArrowLeft, X, MoreHorizontal, Edit3, Trash2 } from 'lucide-react';
+import { MessageSquare, Send, Search, User as UserIcon, Sparkles, RefreshCw, Circle, CheckCheck, Smile, Image as ImageIcon, Mic, ArrowLeft, X, MoreHorizontal, Edit3, Trash2, Play, Pause } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { messagesAPI, usersAPI, API_BASE_URL } from '../services/api';
 import { toast } from '../context/ToastContext';
 import { useWebSocket } from '../context/WebSocketContext';
